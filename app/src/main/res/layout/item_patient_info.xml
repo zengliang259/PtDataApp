@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/titleLabel"
+        android:layout_width="match_parent"
+        android:layout_height="87dp"
+        android:layout_marginEnd="3dp"
+        android:lineSpacingExtra="8sp"
+        android:text="岭南医院INR检测报告单"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/IDLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleLabel"
+        android:layout_marginTop="11dp"
+        android:lineSpacingExtra="8sp"
+        android:text="ID:10000"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/patientNameLabel"
+        android:layout_width="406dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/IDLabel"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:lineSpacingExtra="8sp"
+        android:text="姓名：李木匠"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/resultLabel"
+        android:layout_width="406dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/patientNameLabel"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="5dp"
+        android:lineSpacingExtra="8sp"
+        android:text="INR: 1"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/doctorNameLabel"
+        android:layout_width="406dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/resultLabel"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="5dp"
+        android:lineSpacingExtra="8sp"
+        android:text="报告医生：贾医生"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/checkDateLabel"
+        android:layout_width="406dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/doctorNameLabel"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="5dp"
+        android:lineSpacingExtra="8sp"
+        android:text="检测日期：20190407"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/reportDateLabel"
+        android:layout_width="406dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkDateLabel"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="5dp"
+        android:lineSpacingExtra="8sp"
+        android:text="报告日期：20190407"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+</RelativeLayout>

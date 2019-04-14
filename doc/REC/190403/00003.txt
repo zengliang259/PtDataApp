@@ -1,0 +1,14 @@
+Test Date	2019-04-01
+Test Time	17:19:53
+Software V	V1.1.4
+TestMeter SN	S180101
+TestStrip SN	PT55582253
+Test ID	00003
+Error Code	   
+Vdcs	119.0
+Vacs	857.5
+Temps0	28.7
+Temps1	29.7
+DC_0	012.6
+	17.5
+	42.0
