@@ -1,4 +1,4 @@
-package com.pt.ptdataapp.utils.usb;
+package com.pt.ptdataapp.utils.usbHelper;
 
 import android.app.Activity;
 import android.app.Application;
@@ -16,38 +16,35 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.pt.ptdataapp.utils.Utils;
+import com.pt.ptdataapp.utils.usbHelper.USBBroadCastReceiver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.pt.ptdataapp.utils.usb.USBReceiver.ACTION_USB_PERMISSION;
+import static com.pt.ptdataapp.utils.usbHelper.USBBroadCastReceiver.ACTION_USB_PERMISSION;
 
-/**
- * Created by xxj on 01/15.
- */
-
-public class USBUtil {
-    private static USBUtil instance;
+public class UsbConnectionUtil {
+    private static UsbConnectionUtil instance;
 
     private PendingIntent mPermissionIntent;
     private UsbManager usbManager;
     private Context context;
-    private USBReceiver usbReceiver;
+    private USBBroadCastReceiver usbReceiver;
     private UsbInterface usbInterface;
     private UsbEndpoint usbEndpointIn;
     private UsbEndpoint usbEndpointOut;
     private UsbDeviceConnection usbConnection;
 
-    private USBUtil() {
+    private UsbConnectionUtil() {
     }
 
-    public static USBUtil getInstance() {
+    public static UsbConnectionUtil getInstance() {
         if (instance == null) {
-            synchronized (USBUtil.class) {
+            synchronized (UsbConnectionUtil.class) {
                 if (instance == null) {
-                    instance = new USBUtil();
+                    instance = new UsbConnectionUtil();
                 }
             }
         }
@@ -61,7 +58,7 @@ public class USBUtil {
     public void init(Application context) {
         this.context = context;
         usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
-        usbReceiver = new USBReceiver();
+        usbReceiver = new USBBroadCastReceiver();
     }
 
     /**

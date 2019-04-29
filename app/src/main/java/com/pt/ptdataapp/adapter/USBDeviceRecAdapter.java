@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.pt.ptdataapp.utils.usb.USBUtil;
+import com.pt.ptdataapp.utils.usbHelper.UsbConnectionUtil;
 import com.pt.ptdataapp.R;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class USBDeviceRecAdapter extends RecyclerView.Adapter<USBDeviceRecAdapte
                 "\n序列号：" + usbDevice.getSerialNumber() +
                 "\t\t厂家ID（V_ID）:" + usbDevice.getVendorId() +
                 "\t\t产品ID（P_ID）：" + usbDevice.getProductId() +
-                "\t\t是否拥有权限：" + USBUtil.getInstance().hasPermission(usbDevice)
+                "\t\t是否拥有权限：" + UsbConnectionUtil.getInstance().hasPermission(usbDevice)
         );
     }
 

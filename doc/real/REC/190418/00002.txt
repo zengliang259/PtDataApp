@@ -1,0 +1,31 @@
+Test Date	2019-04-18
+Test Time	16:52:25
+Software  	V1.0.0
+TestStrip SN	PT06486463
+Patient ID	45623	                    
+Test ID	00002
+PT(s)	38.79
+INR	4.65
+Error Code	   
+Vdcs	87.3
+Vacs	878.0
+Temps0	28.3
+Temps1	29.7
+MINC	19.1
+DC_Empty	009.2
+Nstart	1.0
+N000	235.0
+N01	388.0
+Bat	0.0
+AC_HCT	1588.0
+	17.0
+	235.0
+	38.8
+	39.3
+	1581.0
+	1592.0
+	1593.0
+	0.0
+	0.0
+	0.0
+	118.7

@@ -1,0 +1,32 @@
+Test Date	2018-09-02
+Test Time	05:01:08
+Software V	V1.1.4
+TestMeter SN	B001000
+TestStrip SN	PT74478045
+Test ID	00001
+PT(s)	00.00
+INR	0.00
+Error Code	E02
+Vdcs	68.5
+Vacs	855.5
+Temps0	25.0
+Temps1	25.0
+MINC	00.0
+DC_Empty	007.1
+Nstart	0.0
+N000	0.0
+N01	0.0
+DCMV	8.0
+AMPR	8.0
+Bat	0.0
+AC_HCT	0.0
+	17.5
+	0.0
+	0.0
+	25.1
+	0.0
+	1.0
+	1.0
+	0.0
+	0.0
+	0.0

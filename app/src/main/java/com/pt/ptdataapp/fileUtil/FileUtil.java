@@ -3,10 +3,14 @@ package com.pt.ptdataapp.fileUtil;
 import android.os.Environment;
 import android.util.Log;
 
+import com.pt.ptdataapp.Model.FileEntity;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FileUtil {
@@ -107,6 +111,35 @@ public class FileUtil {
 
         Log.e(TAG,"create directory [ "+ dirPath + " ] failed");
         return FLAG_FAILED;
+    }
+
+    public static ArrayList<FileEntity> FindAllFile(String path, boolean includeChildDir)
+    {
+        ArrayList<FileEntity> fileList = new ArrayList<FileEntity>();
+        File fatherFile = new File(path);
+        File[] files = fatherFile.listFiles();
+        if (files != null && files.length > 0)
+        {
+            for (int i = 0; i < files.length; i++) {
+                FileEntity entity = new FileEntity();
+                boolean isDirectory = files[i].isDirectory();
+                if (isDirectory)
+                {
+                    entity.setFileType(FileEntity.Type.FLODER);
+                } else {
+                    entity.setFileType(FileEntity.Type.FILE);
+                }
+                entity.setFileName(files[i].getName().toString());
+                entity.setFilePath(files[i].getAbsolutePath());
+                entity.setFileSize(files[i].length() + "");
+                fileList.add(entity);
+                if (isDirectory && includeChildDir)
+                {
+                    fileList.addAll(FindAllFile(files[i].getAbsolutePath(), includeChildDir));
+                }
+            }
+        }
+        return fileList;
     }
 
 }

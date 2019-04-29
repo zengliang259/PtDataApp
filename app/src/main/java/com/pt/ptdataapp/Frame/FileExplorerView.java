@@ -111,42 +111,16 @@ public class FileExplorerView extends Fragment {
     }
 
     private void getData(final String path) {
-        new Thread(){
+        ((Activity)mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                super.run();
-
-                findAllFiles(path);
+                mList.clear();
+                mList.addAll(FileUtil.FindAllFile(path, false));
+                mHandler.sendEmptyMessage(1);
             }
-        }.start();
+        });
 
     }
-    public void findAllFiles(String path) {
-        mList.clear();
-        if(path ==null ||path.equals("")){
-            return;
-        }
-        File fatherFile = new File(path);
-        File[] files = fatherFile.listFiles();
-        if (files != null && files.length > 0) {
-            for (int i = 0; i < files.length; i++) {
-                FileEntity entity = new FileEntity();
-                boolean isDirectory = files[i].isDirectory();
-                if(isDirectory ==true){
-                    entity.setFileType(FileEntity.Type.FLODER);
-                }else{
-                    entity.setFileType(FileEntity.Type.FILE);
-                }
-                entity.setFileName(files[i].getName().toString());
-                entity.setFilePath(files[i].getAbsolutePath());
-                entity.setFileSize(files[i].length()+"");
-                mList.add(entity);
-            }
-        }
-        mHandler.sendEmptyMessage(1);
-    }
-
-
     public void onBackPressed() {
         if (mFileContentView.getVisibility() == View.VISIBLE)
         {
