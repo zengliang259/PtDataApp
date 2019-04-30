@@ -25,6 +25,7 @@ import com.pt.ptdataapp.Model.DataManager;
 import com.pt.ptdataapp.Model.LocalFileModel;
 import com.pt.ptdataapp.fileUtil.FileUtil;
 import com.pt.ptdataapp.utils.usbHelper.USBBroadCastReceiver;
+import com.pt.ptdataapp.utils.usbHelper.UsbConnectionUtil;
 import com.pt.ptdataapp.utils.usbHelper.UsbHelper;
 
 import java.io.File;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     private int temp_position_index = -1;
     private UsbHelper usbHelper;
     private ArrayList<UsbFile> rootUsbFileList;
+    private ArrayList<File> rootMountFileList;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -72,6 +74,10 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     return true;
                 case R.id.navigation_print:
                     if (temp_position_index != VIEW_PRINT_PAGE_INDEX) {
+                        if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
+                        {
+                            mainPageFragemnt.SaveEditData();
+                        }
                         mTransaction = getSupportFragmentManager().beginTransaction();
                         mTransaction.replace(R.id.id_fragment_content, printPageFragment);
                         mTransaction.commit();
@@ -80,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     return true;
                 case R.id.navigation_file_explorer:
                     if (temp_position_index != VIEW_FILE_EXPLORE_INDEX) {
+                        if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
+                        {
+                            mainPageFragemnt.SaveEditData();
+                        }
                         mTransaction = getSupportFragmentManager().beginTransaction();
                         mTransaction.replace(R.id.id_fragment_content, fileExploreFragment);
                         mTransaction.commit();
@@ -137,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         mainPageFragemnt.SetContext(this);
 
         printPageFragment = new PrintPage();
-
+        printPageFragment.SetContext(this);
 
         fileExploreFragment = new FileExplorerView();
         fileExploreFragment.SetContext(this);
@@ -176,9 +186,10 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     {
         initUsbFile();
         // 数据读取并存储本地
-        if (rootUsbFileList.size() > 0)
+        if (rootMountFileList.size() > 0)
         {
-            this.openUsbFile();
+//            this.openUsbFile();
+            OpenMountFile();
         }
     }
     /**
@@ -187,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     private void initUsbFile() {
         usbHelper = new UsbHelper(this, this);
         rootUsbFileList = new ArrayList<>();
+        rootMountFileList = new ArrayList<>();
         updateUsbFile(0);
     }
 
@@ -198,22 +210,95 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         UsbMassStorageDevice[] usbMassStorageDevices = usbHelper.getDeviceList();
         if (usbMassStorageDevices.length > 0) {
             //存在USB
-            rootUsbFileList.clear();
+            rootMountFileList.clear();
             UsbMassStorageDevice device = usbMassStorageDevices[position];
             if (usbManager.hasPermission(device.getUsbDevice()))
             {
-                List<UsbFile> usbFiles = usbHelper.readDevice(device);
-                for (UsbFile file : usbFiles)
+                // 列举Storage下面的文件夹
+                File storage = new File("/storage");
+                File[] files = storage.listFiles();
+                File usbRootFile = null;
+                for (final File file : files) {
+                    if (file.canRead()) {
+                        if (file.getName().contains("usb")) {
+                            //满足该条件的文件夹就是u盘在手机上的目录,有且只能插入一个
+                            Log.d(TAG, "Usb File dir " + file.getName());
+                            usbRootFile = file;
+                            break;
+                        }
+                    }
+                }
+                if (usbRootFile != null)
                 {
-                    if (file.getName().contains(PtDataFilePathPrefix))
+                    files = usbRootFile.listFiles();
+                    for (File file : files)
                     {
-                        rootUsbFileList.add(file);
+                        if (file.getName().contains(PtDataFilePathPrefix))
+                        {
+                            rootMountFileList.add(file);
+                            break;
+                        }
                     }
                 }
             }
         } else {
             Log.e(TAG, "No Usb Device");
-            rootUsbFileList.clear();
+            rootMountFileList.clear();
+        }
+    }
+
+    private void OpenMountFile()
+    {
+        if (rootMountFileList.size() == 1)
+        {
+            File originalFile = rootMountFileList.get(0);
+            // 首先读取该目录下的id.txt
+            ArrayList<File> files = new ArrayList<>();
+            Collections.addAll(files, originalFile.listFiles());
+            String IDStr = "";
+            for (File childFile : files)
+            {
+                if (childFile.getName() == "id.txt")
+                {
+                    IDStr = FileUtil.getFile(childFile.getAbsolutePath());
+                    break;
+                }
+            }
+            String destFilePath = LocalFileModel.getInstance().idFileMap.get(IDStr);
+            if (destFilePath == null) // 不存在则新建，存在则直接覆盖
+            {
+                // 本地文件目录命名规则
+                File localRootFile = new File(Environment.getExternalStorageDirectory(), LocalFileModel.DATA_PATH);
+                int childFileNum = 0;
+                if (!localRootFile.exists())
+                {
+                    FileUtil.createDir(localRootFile.getAbsolutePath());
+                }
+                else
+                {
+                    childFileNum = localRootFile.listFiles().length;
+                }
+
+                String newFileName = (childFileNum + 1) + "";
+                destFilePath = Environment.getExternalStorageDirectory() + File.separator + LocalFileModel.DATA_PATH + File.separator + newFileName;
+            }
+
+            // 根目录一定是目录
+            if (originalFile.isDirectory()) {
+                try
+                {
+                    FileUtil.copyFolder(originalFile.getAbsolutePath(), destFilePath);
+                    LocalFileModel.getInstance().AddLocalFiles(destFilePath);
+                    if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
+                    {
+                        mainPageFragemnt.NotifyListDataRefresh();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.e(TAG, "CopyUsbDir error");
+                }
+            }
         }
     }
 
@@ -255,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 File localRootFile = new File(Environment.getExternalStorageDirectory(), LocalFileModel.DATA_PATH);
                 int childFileNum = localRootFile.listFiles().length;
                 String newFileName = (childFileNum + 1) + "";
-                filePath = LocalFileModel.DATA_PATH + File.separator + newFileName;
+                filePath = Environment.getExternalStorageDirectory() + File.separator + LocalFileModel.DATA_PATH + File.separator + newFileName;
             }
 
             if (file.isDirectory()) {
@@ -316,10 +401,15 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
 
     @Override
     public void insertUsb(UsbDevice device_add) {
-        if (rootUsbFileList.size() == 0) {
-            updateUsbFile(0);
-            openUsbFile();
+        if (device_add.getProductId() == usbProductID)
+        {
+            if (rootUsbFileList.size() == 0) {
+                updateUsbFile(0);
+//            openUsbFile();
+                OpenMountFile();
+            }
         }
+
     }
 
     @Override
@@ -329,9 +419,13 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
 
     @Override
     public void getReadUsbPermission(UsbDevice usbDevice) {
-        if (rootUsbFileList.size() == 0) {
-            updateUsbFile(0);
-            openUsbFile();
+        if (usbDevice.getProductId() == usbProductID)
+        {
+            if (rootUsbFileList.size() == 0) {
+                updateUsbFile(0);
+//            openUsbFile();
+                OpenMountFile();
+            }
         }
     }
 

@@ -11,6 +11,5 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         Utils.init(this);
-        UsbConnectionUtil.getInstance().init(this);
     }
 }

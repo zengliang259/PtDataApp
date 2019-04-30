@@ -38,27 +38,39 @@ public class DataManager {
 
     public void InitFromLocalFile()
     {
-        LocalFileModel.getInstance().ReadLocalFiles(LocalFileModel.DATA_PATH);
-        Map<String, String> fileMap = LocalFileModel.getInstance().getFileMap();
-        Collection<String> filePaths = fileMap.values();
-        for (String filePath : filePaths)
+        LocalFileModel.getInstance().InitLocalFiles(LocalFileModel.DATA_PATH);
+        UpdatePatientList();
+    }
+
+    public void UpdatePatientList()
+    {
+        patients.clear();
+        List<Map.Entry<String, Long>> sortedFileList = LocalFileModel.getInstance().getSortedFileList();
+        for (Map.Entry<String, Long> kv : sortedFileList)
         {
-            String content = FileUtil.getFile(filePath);
+            String content = FileUtil.getFile(kv.getKey());
             if (content != null)
             {
                 patients.add(FileDataReader.Read(content));
             }
-
         }
     }
 
-    public int GetPatientListCount()
+    public List<PatientInfo> GetPatientList()
     {
-        return patients.size();
+        return patients;
     }
 
     public PatientInfo GetPatientInfoByIndex(int index)
     {
         return patients.get(index);
     }
+
+
+    private List<String> printContentListCache = new ArrayList<>();
+    public void SavePrintContentList(List<String> contentList)
+    {
+        printContentListCache = contentList;
+    }
+    public List<String> getPrintContentListCache(){return printContentListCache;}
 }

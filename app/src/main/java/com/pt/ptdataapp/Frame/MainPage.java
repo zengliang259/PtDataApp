@@ -2,6 +2,8 @@ package com.pt.ptdataapp.Frame;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +32,7 @@ public class MainPage extends Fragment {
     private ViewPagerLayoutManager mLayoutManager;
     private int curSelectIndex = 0;
     private Context activityContext;
+    private Handler mHandler;
 
     public MainPage()
     {
@@ -54,6 +57,12 @@ public class MainPage extends Fragment {
     public void SetContext(Context context)
     {
         activityContext = context;
+
+    }
+
+    public void NotifyListDataRefresh()
+    {
+        mHandler.sendEmptyMessage(1);
     }
 
     private void initView() {
@@ -65,7 +74,7 @@ public class MainPage extends Fragment {
         }
         if (mAdapter == null)
         {
-            mAdapter = new MainPage.MyAdapter();
+            mAdapter = new MainPage.MyAdapter(DataManager.getInstance().GetPatientList());
         }
         if (mRecyclerView == null)
         {
@@ -73,7 +82,24 @@ public class MainPage extends Fragment {
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
         }
-
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 1:
+                        if(mAdapter ==null){
+                            mAdapter = new MainPage.MyAdapter(DataManager.getInstance().GetPatientList());
+                            mRecyclerView.setAdapter(mAdapter);
+                        }else{
+                            mAdapter.notifyDataSetChanged();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
     }
 
     private void initListener(){
@@ -106,25 +132,27 @@ public class MainPage extends Fragment {
     /**
      * 保存编辑数据
      */
-    private void SaveEditData()
+    public void SaveEditData()
     {
-        MainPage.MyAdapter.ViewHolder viewHolder = mAdapter.getItemView(curSelectIndex);
-        PatientInfo pInfo = DataManager.getInstance().GetPatientInfoByIndex(curSelectIndex);
-        if (pInfo != null)
-        {
-            pInfo.ID = Integer.parseInt(viewHolder.IDLabel.getText().toString());
-            pInfo.patientName = viewHolder.patientNameLabel.getText().toString();
-            pInfo.checkResult = viewHolder.resultLabel.getText().toString();
-            pInfo.doctorName = viewHolder.doctorNameLabel.getText().toString();
-            pInfo.checkDate = viewHolder.checkDateLabel.getText().toString();
-            pInfo.reportDate = viewHolder.reportDateLabel.getText().toString();
-        }
+        MainPage.MyAdapter.ViewHolder viewHolder = mAdapter.curShowViewHolder;
+        List<String> printList = new ArrayList<>();
+        printList.add(viewHolder.titleLabel.getText().toString());
+        printList.add(viewHolder.IDLabel.getText().toString());
+        printList.add(viewHolder.patientNameLabel.getText().toString());
+        printList.add(viewHolder.resultLabel.getText().toString());
+        printList.add(viewHolder.doctorNameLabel.getText().toString());
+        printList.add(viewHolder.checkDateLabel.getText().toString());
+        printList.add(viewHolder.reportDateLabel.getText().toString());
+        DataManager.getInstance().SavePrintContentList(printList);
     }
 
     class MyAdapter extends RecyclerView.Adapter<MainPage.MyAdapter.ViewHolder> {
         private List<MainPage.MyAdapter.ViewHolder> itemViewList = new ArrayList<MainPage.MyAdapter.ViewHolder>();
-
-        public MyAdapter() {
+        private List<PatientInfo> mAList;
+        private MainPage.MyAdapter.ViewHolder curShowViewHolder;
+        public MyAdapter(List<PatientInfo> list)
+        {
+            mAList = list;
         }
 
 
@@ -138,20 +166,22 @@ public class MainPage extends Fragment {
 
         @Override
         public void onBindViewHolder(MainPage.MyAdapter.ViewHolder holder, int position) {
-            PatientInfo pInfo = DataManager.getInstance().GetPatientInfoByIndex(position);
+            PatientInfo pInfo = mAList.get(position);
             if (pInfo != null) {
-                holder.IDLabel.setText(Integer.toString(pInfo.ID));
-                holder.patientNameLabel.setText(pInfo.patientName);
-                holder.resultLabel.setText(pInfo.checkResult);
-                holder.doctorNameLabel.setText(pInfo.doctorName);
-                holder.checkDateLabel.setText(pInfo.checkDate);
-                holder.reportDateLabel.setText(pInfo.reportDate);
+                holder.titleLabel.setText(pInfo.title);
+                holder.IDLabel.setText("ID:" + Integer.toString(pInfo.ID));
+                holder.patientNameLabel.setText("病人姓名:" + pInfo.patientName);
+                holder.resultLabel.setText("INR:" + pInfo.checkResult);
+                holder.doctorNameLabel.setText("医生姓名" + pInfo.doctorName);
+                holder.checkDateLabel.setText("检测日期" + pInfo.checkDate);
+                holder.reportDateLabel.setText("报告日期" + pInfo.reportDate);
             }
+            curShowViewHolder = holder;
         }
 
         @Override
         public int getItemCount() {
-            return DataManager.getInstance().GetPatientListCount();
+            return mAList.size();
         }
 
         public MainPage.MyAdapter.ViewHolder getItemView(int index) {

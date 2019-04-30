@@ -16,7 +16,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.pt.ptdataapp.utils.Utils;
-import com.pt.ptdataapp.utils.usbHelper.USBBroadCastReceiver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +35,8 @@ public class UsbConnectionUtil {
     private UsbEndpoint usbEndpointIn;
     private UsbEndpoint usbEndpointOut;
     private UsbDeviceConnection usbConnection;
+    //回调
+    private USBBroadCastReceiver.UsbListener usbListener;
 
     private UsbConnectionUtil() {
     }
@@ -55,10 +56,12 @@ public class UsbConnectionUtil {
         return usbManager;
     }
 
-    public void init(Application context) {
-        this.context = context;
+    public void init(Context context, USBBroadCastReceiver.UsbListener usbListener) {
         usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
+        this.usbListener = usbListener;
         usbReceiver = new USBBroadCastReceiver();
+        usbReceiver.setUsbListener(this.usbListener);
+        registerReceiver(context);
     }
 
     /**
@@ -109,12 +112,10 @@ public class UsbConnectionUtil {
      */
     public void requestPermission(UsbDevice device) {
         if (device != null) {
-            if (usbManager.hasPermission(device)) {
-                Toast.makeText(context, "已经获取到权限", Toast.LENGTH_SHORT).show();
-            } else {
+            if (!usbManager.hasPermission(device)){
                 if (mPermissionIntent != null) {
                     usbManager.requestPermission(device, mPermissionIntent);
-                    Toast.makeText(context, "请求USB权限", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "请求USB权限", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "请注册USB广播", Toast.LENGTH_LONG).show();
                 }
@@ -191,7 +192,7 @@ public class UsbConnectionUtil {
     /**
      * 注册广播
      */
-    public void registerReceiver(Activity context) {
+    public void registerReceiver(Context context) {
         mPermissionIntent = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), 0);
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
