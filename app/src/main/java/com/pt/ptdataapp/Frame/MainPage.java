@@ -143,15 +143,19 @@ public class MainPage extends Fragment {
     public void SaveEditData()
     {
         MainPage.MyAdapter.ViewHolder viewHolder = mAdapter.getItemView(curSelectIndex);
-        List<String> printList = new ArrayList<>();
-        printList.add(viewHolder.titleLabel.getText().toString());
-        printList.add(viewHolder.IDLabel.getText().toString());
-        printList.add(viewHolder.patientNameLabel.getText().toString());
-        printList.add(viewHolder.resultLabel.getText().toString());
-        printList.add(viewHolder.doctorNameLabel.getText().toString());
-        printList.add(viewHolder.checkDateLabel.getText().toString());
-        printList.add(viewHolder.reportDateLabel.getText().toString());
-        DataManager.getInstance().SavePrintContentList(printList);
+        if (viewHolder != null)
+        {
+            List<String> printList = new ArrayList<>();
+            printList.add(viewHolder.titleLabel.getText().toString());
+            printList.add(viewHolder.IDLabel.getText().toString());
+            printList.add(viewHolder.patientNameLabel.getText().toString());
+            printList.add(viewHolder.resultLabel.getText().toString());
+            printList.add(viewHolder.doctorNameLabel.getText().toString());
+            printList.add(viewHolder.checkDateLabel.getText().toString());
+            printList.add(viewHolder.reportDateLabel.getText().toString());
+            DataManager.getInstance().SavePrintContentList(printList);
+        }
+
     }
 
     class MyAdapter extends RecyclerView.Adapter<MainPage.MyAdapter.ViewHolder> {
@@ -176,12 +180,12 @@ public class MainPage extends Fragment {
             PatientInfo pInfo = mAList.get(position);
             if (pInfo != null) {
                 holder.titleLabel.setText(pInfo.title);
-                holder.IDLabel.setText("ID:" + Integer.toString(pInfo.ID));
-                holder.patientNameLabel.setText("病人姓名:" + pInfo.patientName);
-                holder.resultLabel.setText("INR:" + pInfo.checkResult);
-                holder.doctorNameLabel.setText("医生姓名:" + pInfo.doctorName);
-                holder.checkDateLabel.setText("检测日期:" + pInfo.checkDate);
-                holder.reportDateLabel.setText("报告日期:" + pInfo.reportDate);
+                holder.IDLabel.setText(Integer.toString(pInfo.ID));
+                holder.patientNameLabel.setText(pInfo.patientName);
+                holder.resultLabel.setText(pInfo.checkResult);
+                holder.doctorNameLabel.setText(pInfo.doctorName);
+                holder.checkDateLabel.setText(pInfo.checkDate);
+                holder.reportDateLabel.setText(pInfo.reportDate);
             }
         }
 

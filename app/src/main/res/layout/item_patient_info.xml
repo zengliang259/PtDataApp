@@ -21,75 +21,179 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/IDLabel"
-        android:layout_width="match_parent"
+        android:id="@+id/IDLabel_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/titleLabel"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
         android:lineSpacingExtra="8sp"
-        android:text="ID:10000"
+        android:text="ID:"
         android:textAlignment="center"
-        android:textSize="30sp" />
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/patientNameLabel"
-        android:layout_width="406dp"
+    <TextView
+        android:id="@+id/IDLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleLabel"
+        android:layout_alignLeft="@+id/IDLabel_title"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="15dp"
+        android:lineSpacingExtra="8sp"
+        android:text="I000100000"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/patientNameLabel_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/IDLabel"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="5dp"
         android:lineSpacingExtra="8sp"
-        android:text="姓名：李木匠"
-        android:textAlignment="center"
-        android:textSize="30sp" />
+        android:text="姓名:"
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/resultLabel"
-        android:layout_width="406dp"
+    <TextView
+        android:id="@+id/patientNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/IDLabel"
+        android:layout_alignLeft="@+id/patientNameLabel_title"
+        android:layout_marginLeft="94dp"
+        android:layout_marginTop="20dp"
+        android:lineSpacingExtra="8sp"
+        android:text="李木匠222"
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/resultLabel_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/patientNameLabel"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="25dp"
         android:lineSpacingExtra="8sp"
-        android:text="INR: 1"
-        android:textAlignment="center"
+        android:text="INR:"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
         android:textSize="36sp"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/doctorNameLabel"
-        android:layout_width="406dp"
+    <TextView
+        android:id="@+id/resultLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/patientNameLabel"
+        android:layout_alignLeft="@+id/resultLabel_title"
+        android:layout_marginLeft="98dp"
+        android:layout_marginTop="25dp"
+        android:lineSpacingExtra="8sp"
+        android:text="18.03"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/doctorNameLabel_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/resultLabel"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="5dp"
         android:lineSpacingExtra="8sp"
-        android:text="报告医生：贾医生"
-        android:textAlignment="center"
-        android:textSize="30sp" />
+        android:text="报告医生:"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/checkDateLabel"
-        android:layout_width="406dp"
+    <TextView
+        android:id="@+id/doctorNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/resultLabel"
+        android:layout_alignLeft="@+id/doctorNameLabel_title"
+        android:layout_marginLeft="158dp"
+        android:layout_marginTop="25dp"
+        android:lineSpacingExtra="8sp"
+        android:text="贾医生"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/checkDateLabel_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/doctorNameLabel"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
         android:lineSpacingExtra="8sp"
-        android:text="检测日期：20190407"
-        android:textAlignment="center"
-        android:textSize="30sp" />
+        android:text="检测日期:"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/reportDateLabel"
-        android:layout_width="406dp"
+    <TextView
+        android:id="@+id/checkDateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/doctorNameLabel"
+        android:layout_alignLeft="@+id/checkDateLabel_title"
+        android:layout_marginLeft="159dp"
+        android:layout_marginTop="20dp"
+        android:lineSpacingExtra="8sp"
+        android:text="20190407"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/reportDateLabel_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/checkDateLabel"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
         android:lineSpacingExtra="8sp"
-        android:text="报告日期：20190407"
+        android:text="报告日期"
         android:textAlignment="center"
-        android:textSize="30sp" />
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/reportDateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkDateLabel"
+        android:layout_alignLeft="@+id/reportDateLabel_title"
+        android:layout_marginLeft="161dp"
+        android:layout_marginTop="20dp"
+        android:lineSpacingExtra="8sp"
+        android:text="20190407"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -111,13 +111,27 @@ public class PrintPage extends Fragment implements USBBroadCastReceiver.UsbListe
         }
 
         List<String> printList = DataManager.getInstance().getPrintContentListCache();
-        titleLabel.setText(printList.get(0));
-        IDLabel.setText(printList.get(1));
-        patientNameLabel.setText(printList.get(2));
-        resultLabel.setText(printList.get(3));
-        doctorNameLabel.setText(printList.get(4));
-        checkDateLabel.setText(printList.get(5));
-        reportDateLabel.setText(printList.get(6));
+        if (printList.size() >= 7)
+        {
+            titleLabel.setText(printList.get(0));
+            IDLabel.setText(printList.get(1));
+            patientNameLabel.setText(printList.get(2));
+            resultLabel.setText(printList.get(3));
+            doctorNameLabel.setText(printList.get(4));
+            checkDateLabel.setText(printList.get(5));
+            reportDateLabel.setText(printList.get(6));
+        }
+        else
+        {
+            titleLabel.setText("岭南医院INR检测报告单");
+            IDLabel.setText("");
+            patientNameLabel.setText("");
+            resultLabel.setText("");
+            doctorNameLabel.setText("");
+            checkDateLabel.setText("");
+            reportDateLabel.setText("");
+        }
+
         rootView.findViewById(R.id.testPrintBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,12 +162,12 @@ public class PrintPage extends Fragment implements USBBroadCastReceiver.UsbListe
         Toast.makeText(Utils.getContext(), "开始打印...", Toast.LENGTH_SHORT).show();
         List<String> printList = new ArrayList<>();
         printList.add(titleLabel.getText().toString());
-        printList.add(IDLabel.getText().toString());
-        printList.add(patientNameLabel.getText().toString());
-        printList.add(resultLabel.getText().toString());
-        printList.add(doctorNameLabel.getText().toString());
-        printList.add(checkDateLabel.getText().toString());
-        printList.add(reportDateLabel.getText().toString());
+        printList.add("ID:  " + IDLabel.getText().toString());
+        printList.add("姓名:   " + patientNameLabel.getText().toString());
+        printList.add("INR:   " + resultLabel.getText().toString());
+        printList.add("报告医生:   " + doctorNameLabel.getText().toString());
+        printList.add("检测日期:   " + checkDateLabel.getText().toString());
+        printList.add("报告日期:   " + reportDateLabel.getText().toString());
         byte[] bytes = TSCUtils.StartPrint(printList);
         usbUtil.sendMessage(bytes);
     }
