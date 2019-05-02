@@ -55,6 +55,13 @@ public class PrintPage extends Fragment implements USBBroadCastReceiver.UsbListe
         if (rootView == null)
         {
             rootView = inflater.inflate(R.layout.fragment_print_page, container, false);
+            IDLabel = rootView.findViewById(R.id.printIDLabel);
+            titleLabel = rootView.findViewById(R.id.printTitleLabel);
+            patientNameLabel = rootView.findViewById(R.id.printPatientNameLabel);
+            resultLabel = rootView.findViewById(R.id.printResultLabel);
+            doctorNameLabel = rootView.findViewById(R.id.printDoctorNameLabel);
+            checkDateLabel = rootView.findViewById(R.id.printCheckDateLabel);
+            reportDateLabel = rootView.findViewById(R.id.printReportDateLabel);
         }
 
         ViewGroup parent = (ViewGroup) rootView.getParent();
@@ -79,6 +86,7 @@ public class PrintPage extends Fragment implements USBBroadCastReceiver.UsbListe
 
     private void InitView()
     {
+        usbUtil = UsbConnectionUtil.getInstance();
         List<UsbDevice> deviceList = UsbConnectionUtil.getInstance().getDeviceList();
         if (deviceList.size() > 0)
         {
@@ -93,7 +101,6 @@ public class PrintPage extends Fragment implements USBBroadCastReceiver.UsbListe
                 }
             }
             // 获取权限
-            usbUtil = UsbConnectionUtil.getInstance();
             if (mDevice != null)
             {
                 if (!usbUtil.hasPermission(mDevice))
@@ -102,13 +109,6 @@ public class PrintPage extends Fragment implements USBBroadCastReceiver.UsbListe
                 }
             }
         }
-        IDLabel = rootView.findViewById(R.id.printIDLabel);
-        titleLabel = rootView.findViewById(R.id.printTitleLabel);
-        patientNameLabel = rootView.findViewById(R.id.printPatientNameLabel);
-        resultLabel = rootView.findViewById(R.id.printResultLabel);
-        doctorNameLabel = rootView.findViewById(R.id.printDoctorNameLabel);
-        checkDateLabel = rootView.findViewById(R.id.printCheckDateLabel);
-        reportDateLabel = rootView.findViewById(R.id.printReportDateLabel);
 
         List<String> printList = DataManager.getInstance().getPrintContentListCache();
         titleLabel.setText(printList.get(0));
@@ -121,7 +121,6 @@ public class PrintPage extends Fragment implements USBBroadCastReceiver.UsbListe
         rootView.findViewById(R.id.testPrintBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                usbUtil = UsbConnectionUtil.getInstance();
                 if (mDevice != null)
                 {
                     if (usbUtil.hasPermission(mDevice))
@@ -138,7 +137,7 @@ public class PrintPage extends Fragment implements USBBroadCastReceiver.UsbListe
                 }
                 else
                 {
-                    Toast.makeText(Utils.getContext(), "未找到USB打印设备 ", Toast.LENGTH_SHORT);
+                    Toast.makeText(Utils.getContext(), "未找到USB打印设备 ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -168,19 +167,26 @@ public class PrintPage extends Fragment implements USBBroadCastReceiver.UsbListe
 
     @Override
     public void removeUsb(UsbDevice device_remove) {
-        Log.d(TAG, device_remove.getDeviceName()+" remove");
-        usbUtil.closeport(1000);
-        Toast.makeText(Utils.getContext(), "Usb设备 " + device_remove.getDeviceName() + " 拔出", Toast.LENGTH_SHORT).show();
+        if (device_remove.getProductId() == UsbProductID)
+        {
+            Log.d(TAG, device_remove.getDeviceName()+" remove");
+            usbUtil.closeport(1000);
+            Toast.makeText(Utils.getContext(), "Usb设备 " + device_remove.getDeviceName() + " 拔出", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void getReadUsbPermission(UsbDevice usbDevice) {
-        Toast.makeText(Utils.getContext(), "成功获取Usb设备 " + usbDevice.getDeviceName() + " 权限", Toast.LENGTH_SHORT).show();
-        mDevice = usbDevice;
+        if (usbDevice.getProductId() == UsbProductID) {
+            Toast.makeText(Utils.getContext(), "成功获取Usb设备 " + usbDevice.getDeviceName() + " 权限", Toast.LENGTH_SHORT).show();
+            mDevice = usbDevice;
+        }
     }
 
     @Override
     public void failedReadUsb(UsbDevice usbDevice) {
-        Toast.makeText(Utils.getContext(), "读取Usb设备 " + usbDevice.getDeviceName() + " 失败", Toast.LENGTH_SHORT).show();
+        if (usbDevice.getProductId() == UsbProductID) {
+            Toast.makeText(Utils.getContext(), "读取Usb设备 " + usbDevice.getDeviceName() + " 失败", Toast.LENGTH_SHORT).show();
+        }
     }
 }

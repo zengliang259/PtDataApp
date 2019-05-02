@@ -11,14 +11,15 @@
     <RelativeLayout
         android:id="@+id/root_view"
         android:layout_width="match_parent"
-        android:layout_height="549dp">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/printTitleLabel"
             android:layout_width="match_parent"
-            android:layout_height="87dp"
-            android:layout_marginEnd="3dp"
+            android:layout_height="73dp"
             android:lineSpacingExtra="8sp"
+            android:paddingTop="10dp"
+            android:saveEnabled="false"
             android:text="岭南医院INR检测报告单"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
@@ -30,8 +31,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/printTitleLabel"
-            android:layout_marginTop="1dp"
+            android:layout_marginTop="10dp"
             android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
             android:text="ID:10000"
             android:textAlignment="center"
             android:textSize="30sp" />
@@ -44,6 +46,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
             android:text="姓名：李木匠"
             android:textAlignment="center"
             android:textSize="30sp" />
@@ -53,9 +56,10 @@
             android:layout_width="406dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/printPatientNameLabel"
-            android:layout_marginTop="9dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
             android:text="INR: 1"
             android:textAlignment="center"
             android:textSize="36sp"
@@ -66,9 +70,10 @@
             android:layout_width="406dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/printResultLabel"
-            android:layout_marginTop="9dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
             android:text="报告医生：贾医生"
             android:textAlignment="center"
             android:textSize="30sp" />
@@ -78,9 +83,10 @@
             android:layout_width="406dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/printDoctorNameLabel"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
             android:text="检测日期：20190407"
             android:textAlignment="center"
             android:textSize="30sp" />
@@ -90,9 +96,10 @@
             android:layout_width="406dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/printCheckDateLabel"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
             android:text="报告日期：20190407"
             android:textAlignment="center"
             android:textSize="30sp" />
@@ -100,21 +107,15 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/load_devices"
-        android:layout_width="wrap_content"
+        android:id="@+id/testPrintBtn"
+        android:layout_width="126dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/root_view"
-        android:layout_marginTop="-35dp"
-        android:text="刷新usb列表" />
-
-    <Button
-        android:id="@+id/testPrintBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/load_devices"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="137dp"
+        android:layout_marginTop="-6dp"
         android:layout_marginBottom="-12dp"
-        android:text="测试打印" />
+        android:text="打印"
+        android:textSize="30sp" />
 
 </RelativeLayout>

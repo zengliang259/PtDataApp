@@ -1,7 +1,11 @@
 package com.pt.ptdataapp.Model;
 
+import android.os.Environment;
+import android.widget.Toast;
+
 import com.pt.ptdataapp.fileUtil.FileDataReader;
 import com.pt.ptdataapp.fileUtil.FileUtil;
+import com.pt.ptdataapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,8 +42,14 @@ public class DataManager {
 
     public void InitFromLocalFile()
     {
-        LocalFileModel.getInstance().InitLocalFiles(LocalFileModel.DATA_PATH);
-        UpdatePatientList();
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            LocalFileModel.getInstance().InitLocalFiles(LocalFileModel.DATA_PATH);
+            UpdatePatientList();
+        }
+        else
+        {
+            Toast.makeText(Utils.getContext(), "请检查SDcard是否正确插入 ", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void UpdatePatientList()

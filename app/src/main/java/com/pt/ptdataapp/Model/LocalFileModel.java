@@ -72,11 +72,14 @@ public class LocalFileModel {
         }
         // 先删除改目录之前的文件索引
         List<String> deleteFilePaths = fileDirMap.get(rootDir.getName());
-        for (String filePath : deleteFilePaths)
+        if (deleteFilePaths != null)
         {
-            fileMap.remove(filePath);
+            for (String filePath : deleteFilePaths)
+            {
+                fileMap.remove(filePath);
+            }
+            fileDirMap.remove(rootDir.getName());
         }
-        fileDirMap.remove(rootDir.getName());
 
         ReadFilesLoop(rootDir);
         SortFileMap();
@@ -99,7 +102,19 @@ public class LocalFileModel {
         // 通过比较器实现比较排序
         Collections.sort(sortedFileList, new Comparator<Map.Entry<String, Long>>() {
             public int compare(Map.Entry<String, Long> mapping1, Map.Entry<String, Long> mapping2) {
-                return mapping1.getKey().compareTo(mapping2.getKey());
+                long coef = -mapping1.getValue() + mapping2.getValue();
+                if (coef > 0)
+                {
+                    return 1;
+                }
+                else if (coef < 0)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 0;
+                }
             }
         });
     }

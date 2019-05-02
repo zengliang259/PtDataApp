@@ -65,6 +65,14 @@ public class MainPage extends Fragment {
         mHandler.sendEmptyMessage(1);
     }
 
+    public void ScrollToTop()
+    {
+        if (mAdapter != null && mAdapter.mAList.size() > 0)
+        {
+            mRecyclerView.smoothScrollToPosition(0);
+        }
+    }
+
     private void initView() {
 
         if (mLayoutManager == null)
@@ -134,7 +142,7 @@ public class MainPage extends Fragment {
      */
     public void SaveEditData()
     {
-        MainPage.MyAdapter.ViewHolder viewHolder = mAdapter.curShowViewHolder;
+        MainPage.MyAdapter.ViewHolder viewHolder = mAdapter.getItemView(curSelectIndex);
         List<String> printList = new ArrayList<>();
         printList.add(viewHolder.titleLabel.getText().toString());
         printList.add(viewHolder.IDLabel.getText().toString());
@@ -149,7 +157,6 @@ public class MainPage extends Fragment {
     class MyAdapter extends RecyclerView.Adapter<MainPage.MyAdapter.ViewHolder> {
         private List<MainPage.MyAdapter.ViewHolder> itemViewList = new ArrayList<MainPage.MyAdapter.ViewHolder>();
         private List<PatientInfo> mAList;
-        private MainPage.MyAdapter.ViewHolder curShowViewHolder;
         public MyAdapter(List<PatientInfo> list)
         {
             mAList = list;
@@ -172,11 +179,10 @@ public class MainPage extends Fragment {
                 holder.IDLabel.setText("ID:" + Integer.toString(pInfo.ID));
                 holder.patientNameLabel.setText("病人姓名:" + pInfo.patientName);
                 holder.resultLabel.setText("INR:" + pInfo.checkResult);
-                holder.doctorNameLabel.setText("医生姓名" + pInfo.doctorName);
-                holder.checkDateLabel.setText("检测日期" + pInfo.checkDate);
-                holder.reportDateLabel.setText("报告日期" + pInfo.reportDate);
+                holder.doctorNameLabel.setText("医生姓名:" + pInfo.doctorName);
+                holder.checkDateLabel.setText("检测日期:" + pInfo.checkDate);
+                holder.reportDateLabel.setText("报告日期:" + pInfo.reportDate);
             }
-            curShowViewHolder = holder;
         }
 
         @Override
@@ -184,8 +190,15 @@ public class MainPage extends Fragment {
             return mAList.size();
         }
 
-        public MainPage.MyAdapter.ViewHolder getItemView(int index) {
-            return itemViewList.get(index);
+        public MainPage.MyAdapter.ViewHolder getItemView(int position) {
+            for(ViewHolder view: itemViewList)
+            {
+                if (position == view.getLayoutPosition())
+                {
+                    return view;
+                }
+            }
+            return null;
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

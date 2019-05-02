@@ -9,7 +9,7 @@ public class FileDataReader
 {
     public enum DataNameEnum
     {
-        PatientID("Test ID"),
+        PatientID("Patient ID"),
         INR("INR"),
         TestDate("Test Date");
 
@@ -62,12 +62,18 @@ public class FileDataReader
     {
         String tempStr = itemStr.replace("\r", "");
         String[] splitStr = tempStr.split("\t");
-        if (splitStr.length == 2)
+        if (splitStr.length >= 2)
         {
             if ((curMatchCode >> 0 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.PatientID.toString()) >= 0))
             {
                 curMatchCode = curMatchCode | 1 << 0;
-                info.ID = Integer.parseInt(splitStr[1]);
+                try {
+                    info.ID = Integer.parseInt(splitStr[1]);
+                }
+                catch (Exception e)
+                {
+                    info.ID = 0;
+                }
             }
             else if ((curMatchCode >> 1 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.INR.toString()) >= 0))
             {
