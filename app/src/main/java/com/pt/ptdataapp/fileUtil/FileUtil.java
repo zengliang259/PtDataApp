@@ -214,8 +214,8 @@ public class FileUtil {
             }
         }
         catch (Exception e) {
-            System.out.println("复制整个文件夹内容操作出错");
-            e.printStackTrace();
+           Log.e(TAG,"复制整个文件夹内容操作出错");
+//            e.printStackTrace();
 
         }
 

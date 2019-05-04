@@ -62,7 +62,11 @@ public class MainPage extends Fragment {
 
     public void NotifyListDataRefresh()
     {
-        mHandler.sendEmptyMessage(1);
+        if (rootView != null)
+        {
+            mHandler.sendEmptyMessage(1);
+        }
+
     }
 
     public void ScrollToTop()
@@ -119,13 +123,13 @@ public class MainPage extends Fragment {
 
             @Override
             public void onPageRelease(boolean isNext,int position) {
-                Log.e(TAG,"释放位置:"+position +" 下一页:"+isNext);
+//                Log.e(TAG,"释放位置:"+position +" 下一页:"+isNext);
 
             }
 
             @Override
             public void onPageSelected(int position,boolean isEnd) {
-                Log.e(TAG,"选中位置:"+position+"  是否是滑动到底部:"+isEnd);
+//                Log.e(TAG,"选中位置:"+position+"  是否是滑动到底部:"+isEnd);
                 curSelectIndex = position;
             }
 

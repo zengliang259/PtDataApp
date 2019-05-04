@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.Uri;
+import android.util.Log;
 
 /**
  * Author ： BlackHao
@@ -57,6 +59,18 @@ public class USBBroadCastReceiver extends BroadcastReceiver {
                     }
                 }
                 break;
+            case Intent.ACTION_MEDIA_MOUNTED:
+                String mountPath = intent.getData().getPath();
+                if (mountPath != null && usbListener != null) {
+                    usbListener.mountUsbFolder(mountPath);
+                }
+                break;
+            case Intent.ACTION_MEDIA_UNMOUNTED:
+                String unMountPath = intent.getData().getPath();
+                if (unMountPath != null && usbListener != null) {
+                    usbListener.unMountUsbFolder(unMountPath);
+                }
+                break;
         }
     }
 
@@ -79,5 +93,8 @@ public class USBBroadCastReceiver extends BroadcastReceiver {
 
         //读取USB信息失败
         void failedReadUsb(UsbDevice usbDevice);
+
+        void mountUsbFolder(String mountPath);
+        void unMountUsbFolder(String unMountPath);
     }
 }

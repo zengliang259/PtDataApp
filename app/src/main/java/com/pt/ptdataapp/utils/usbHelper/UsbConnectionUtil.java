@@ -29,7 +29,6 @@ public class UsbConnectionUtil {
 
     private PendingIntent mPermissionIntent;
     private UsbManager usbManager;
-    private Context context;
     private USBBroadCastReceiver usbReceiver;
     private UsbInterface usbInterface;
     private UsbEndpoint usbEndpointIn;
@@ -80,7 +79,6 @@ public class UsbConnectionUtil {
     }
 
     /**
-     * mVendorId=1137,mProductId=85  佳博 3150T 标签打印机
      *
      * @param vendorId  厂商ID
      * @param productId 产品ID
@@ -96,7 +94,7 @@ public class UsbConnectionUtil {
                 return device;
             }
         }
-        Toast.makeText(context, "没有对应的设备", Toast.LENGTH_SHORT).show();
+        Toast.makeText(Utils.getContext(), "没有发现对应的USB打印设备", Toast.LENGTH_SHORT).show();
         return null;
     }
 
@@ -115,9 +113,9 @@ public class UsbConnectionUtil {
             if (!usbManager.hasPermission(device)){
                 if (mPermissionIntent != null) {
                     usbManager.requestPermission(device, mPermissionIntent);
-//                    Toast.makeText(context, "请求USB权限", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(Utils.getContext(), "请求USB权限", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "请注册USB广播", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Utils.getContext(), "请注册USB广播", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -197,6 +195,7 @@ public class UsbConnectionUtil {
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         context.registerReceiver(usbReceiver, filter);
     }
 

@@ -1,6 +1,7 @@
 package com.pt.ptdataapp.Model;
 
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.pt.ptdataapp.fileUtil.FileDataReader;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 public class DataManager {
 
+    private String TAG = "DataManager";
     private static DataManager _instance;
     public static DataManager getInstance() {
         if (_instance == null)
@@ -54,6 +56,7 @@ public class DataManager {
 
     public void UpdatePatientList()
     {
+        Log.d(TAG, "UpdatePatientList Start ...");
         patients.clear();
         List<Map.Entry<String, Long>> sortedFileList = LocalFileModel.getInstance().getSortedFileList();
         for (Map.Entry<String, Long> kv : sortedFileList)
@@ -64,6 +67,7 @@ public class DataManager {
                 patients.add(FileDataReader.Read(content));
             }
         }
+        Log.d(TAG, "UpdatePatientList End");
     }
 
     public List<PatientInfo> GetPatientList()

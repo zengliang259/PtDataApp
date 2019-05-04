@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pt.ptdataapp">
+    package="com.pt.ptdataapp"
+    android:installLocation="internalOnly">
+    <!--添加允许程序开机自动运行权限-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".App"
@@ -17,15 +20,17 @@
             android:configChanges="screenSize|keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
-            <!-- <meta-data -->
-            <!-- android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" -->
-            <!-- android:resource="@xml/device_filter" /> -->
         </activity>
+        <!--注册接收系统开机广播消息的广播接收者-->
+        <receiver
+            android:name=".utils.BootBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
     </application>
     <!--往sdcard中写入数据的权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>

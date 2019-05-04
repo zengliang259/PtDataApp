@@ -67,6 +67,14 @@ public class UsbHelper {
         //注册监听自定义广播
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         context.registerReceiver(mUsbReceiver, filter);
+
+        // 注册挂载设备广播
+        IntentFilter mountFilter = new IntentFilter();
+        mountFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        mountFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
+        mountFilter.addAction(Intent.ACTION_MEDIA_REMOVED);
+        mountFilter.addDataScheme("file");
+        context.registerReceiver(mUsbReceiver, mountFilter);
     }
 
     /**

@@ -49,6 +49,7 @@ public class LocalFileModel {
         if (!rootDir.exists()) {//判断路径是否存在
             return ;
         }
+        Log.d(TAG,"InitLocalFiles " + rootDir.getAbsolutePath());
         idFilePaths.clear();
         idFileMap.clear();
         ReadFilesLoop(rootDir);
@@ -70,6 +71,7 @@ public class LocalFileModel {
         if (!rootDir.exists()) {//判断路径是否存在
             return ;
         }
+        Log.d(TAG,"AddLocalFiles " + rootDir.getAbsolutePath());
         // 先删除改目录之前的文件索引
         List<String> deleteFilePaths = fileDirMap.get(rootDir.getName());
         if (deleteFilePaths != null)
@@ -125,7 +127,7 @@ public class LocalFileModel {
         if(dirs == null){//判断权限
             return null;
         }
-        Log.d(TAG,"len =" + dirs.length);
+//        Log.d(TAG,"len =" + dirs.length);
         ArrayList<String> fileList = new ArrayList<String>();
         for (File childFile : dirs) {//遍历一级目录
             if(childFile.isDirectory())
@@ -139,9 +141,9 @@ public class LocalFileModel {
                     String filePath = childFile.getAbsolutePath();//获取文件路径
                     String fileName = childFile.getName().substring(0, _name.length() - 4);//获取文件名
                     long lastModifyTime = childFile.lastModified();
-                    Log.d(TAG, "fileName:" + fileName);
-                    Log.d(TAG, "filePath:" + filePath);
-                    Log.d(TAG, "last modify time:" + lastModifyTime);
+//                    Log.d(TAG, "fileName:" + fileName);
+//                    Log.d(TAG, "filePath:" + filePath);
+//                    Log.d(TAG, "last modify time:" + lastModifyTime);
                     try {
                         fileList.add(fileName);
                         if (fileName.equals( "id")) // id文件不是数据文件
@@ -153,7 +155,7 @@ public class LocalFileModel {
                             fileMap.put(filePath,lastModifyTime);
                         }
                     } catch (Exception e) {
-
+                        Log.e(TAG, "读取" + fileName +"文件失败");
                     }
                 }
             }
