@@ -61,7 +61,8 @@ public class DataManager {
         List<Map.Entry<String, Long>> sortedFileList = LocalFileModel.getInstance().getSortedFileList();
         for (Map.Entry<String, Long> kv : sortedFileList)
         {
-            String content = FileUtil.getFile(kv.getKey());
+            String content = FileUtil.getEncryptFile(kv.getKey());
+            Log.d(TAG,content);
             if (content != null)
             {
                 patients.add(FileDataReader.Read(content));

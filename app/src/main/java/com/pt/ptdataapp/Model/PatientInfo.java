@@ -2,7 +2,7 @@ package com.pt.ptdataapp.Model;
 
 public class PatientInfo {
     public String title = "岭南医院INR检测报告单";
-    public int ID;
+    public String ID;
     public String checkResult;
     public String patientName;
     public String doctorName;

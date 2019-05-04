@@ -67,13 +67,7 @@ public class FileDataReader
             if ((curMatchCode >> 0 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.PatientID.toString()) >= 0))
             {
                 curMatchCode = curMatchCode | 1 << 0;
-                try {
-                    info.ID = Integer.parseInt(splitStr[1]);
-                }
-                catch (Exception e)
-                {
-                    info.ID = 0;
-                }
+                info.ID = splitStr[1];
             }
             else if ((curMatchCode >> 1 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.INR.toString()) >= 0))
             {

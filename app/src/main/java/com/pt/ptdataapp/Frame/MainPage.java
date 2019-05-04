@@ -184,7 +184,7 @@ public class MainPage extends Fragment {
             PatientInfo pInfo = mAList.get(position);
             if (pInfo != null) {
                 holder.titleLabel.setText(pInfo.title);
-                holder.IDLabel.setText(Integer.toString(pInfo.ID));
+                holder.IDLabel.setText(pInfo.ID);
                 holder.patientNameLabel.setText(pInfo.patientName);
                 holder.resultLabel.setText(pInfo.checkResult);
                 holder.doctorNameLabel.setText(pInfo.doctorName);

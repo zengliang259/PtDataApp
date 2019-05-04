@@ -159,7 +159,7 @@ public class FileExplorerView extends Fragment {
                     ((Activity)mContext).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            String fileContent = FileUtil.getFile(entity.getFilePath());
+                            String fileContent = FileUtil.getEncryptFile(entity.getFilePath());
                             Message msg = new Message();
                             msg.what = 2;
                             msg.obj = fileContent;
