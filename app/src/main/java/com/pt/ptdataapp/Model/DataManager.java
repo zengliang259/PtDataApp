@@ -88,4 +88,11 @@ public class DataManager {
         printContentListCache = contentList;
     }
     public List<String> getPrintContentListCache(){return printContentListCache;}
+
+    private List<String> fileDetailContentListCache = new ArrayList<>();
+    public void SaveFileDetailContentList(List<String> contentList)
+    {
+        fileDetailContentListCache = contentList;
+    }
+    public List<String> getFileDetailContentListCache(){return fileDetailContentListCache;}
 }

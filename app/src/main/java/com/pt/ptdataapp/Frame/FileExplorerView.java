@@ -15,11 +15,14 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pt.ptdataapp.Model.FileEntity;
 import com.pt.ptdataapp.Model.LocalFileModel;
+import com.pt.ptdataapp.Model.PatientInfo;
 import com.pt.ptdataapp.R;
+import com.pt.ptdataapp.fileUtil.FileDataReader;
 import com.pt.ptdataapp.fileUtil.FileUtil;
 
 import java.io.File;
@@ -31,7 +34,16 @@ import java.util.ArrayList;
 public class FileExplorerView extends Fragment {
     private View rootView;
     private ListView mListView;
-    private TextView mFileContentView;
+    private RelativeLayout mFileContentView;
+
+    TextView IDLabel;
+    TextView titleLabel;
+    TextView patientNameLabel;
+    TextView resultLabel;
+    TextView doctorNameLabel;
+    TextView checkDateLabel;
+    TextView reportDateLabel;
+
     private MyFileAdapter mAdapter;
     private Context mContext;
     private File currentFile;
@@ -55,6 +67,13 @@ public class FileExplorerView extends Fragment {
         if (rootView == null)
         {
             rootView = inflater.inflate(R.layout.fragment_file_explorer_view, container, false);
+            IDLabel = rootView.findViewById(R.id.printIDLabel);
+            titleLabel = rootView.findViewById(R.id.printTitleLabel);
+            patientNameLabel = rootView.findViewById(R.id.printPatientNameLabel);
+            resultLabel = rootView.findViewById(R.id.printResultLabel);
+            doctorNameLabel = rootView.findViewById(R.id.printDoctorNameLabel);
+            checkDateLabel = rootView.findViewById(R.id.printCheckDateLabel);
+            reportDateLabel = rootView.findViewById(R.id.printReportDateLabel);
         }
 
         ViewGroup parent = (ViewGroup) rootView.getParent();
@@ -96,7 +115,7 @@ public class FileExplorerView extends Fragment {
                             mFileContentView.setVisibility(View.VISIBLE);
                             if (msg.obj != null)
                             {
-                                mFileContentView.setText((String)msg.obj);
+                                ShowFileDetailInfo((String)msg.obj);
                             }
 
                             break;
@@ -121,6 +140,19 @@ public class FileExplorerView extends Fragment {
         });
 
     }
+
+    private void ShowFileDetailInfo(String fileContent)
+    {
+        PatientInfo pInfo = FileDataReader.Read(fileContent);
+        titleLabel.setText(pInfo.title);
+        IDLabel.setText(pInfo.ID);
+        patientNameLabel.setText(pInfo.patientName);
+        resultLabel.setText(pInfo.checkResult);
+        doctorNameLabel.setText(pInfo.doctorName);
+        checkDateLabel.setText(pInfo.checkDate);
+        reportDateLabel.setText(pInfo.reportDate);
+    }
+
     public void onBackPressed() {
         if (mFileContentView.getVisibility() == View.VISIBLE)
         {
@@ -144,7 +176,7 @@ public class FileExplorerView extends Fragment {
 
     private void initView() {
         mListView =  rootView.findViewById(R.id.file_list_view);
-        mFileContentView = rootView.findViewById(R.id.file_content_label);
+        mFileContentView = rootView.findViewById(R.id.file_content_root);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

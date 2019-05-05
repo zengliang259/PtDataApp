@@ -1,20 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Frame.FileExplorerView">
+    tools:context=".Frame.FileExplorerView"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <ListView
         android:id="@+id/file_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <TextView
-        android:id="@+id/file_content_label"
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="TextView"
         android:visibility="invisible" />
+
+    <RelativeLayout
+        android:id="@+id/file_content_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/printTitleLabel"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:lineSpacingExtra="8sp"
+            android:paddingTop="30dp"
+            android:text="岭南医院\nINR检测报告单"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/print_black_line"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_below="@+id/printTitleLabel"
+            android:background="#000000"></View>
+
+        <TextView
+            android:id="@+id/printIDLabel_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/print_black_line"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:lineSpacingExtra="8sp"
+            android:text="ID:"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/printIDLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/print_black_line"
+            android:layout_alignLeft="@+id/printIDLabel_title"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="25dp"
+            android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
+            android:text="I00010000"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/printPatientNameLabel_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/printIDLabel"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="5dp"
+            android:lineSpacingExtra="8sp"
+            android:text="姓名:"
+            android:textAlignment="viewStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/printPatientNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/printIDLabel"
+            android:layout_alignLeft="@+id/printPatientNameLabel_title"
+            android:layout_marginLeft="71dp"
+            android:layout_marginTop="20dp"
+            android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
+            android:text="李木匠222"
+            android:textAlignment="viewStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/printResultLabel_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/printPatientNameLabel"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:lineSpacingExtra="8sp"
+            android:text="INR:"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/printResultLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/printPatientNameLabel"
+            android:layout_alignLeft="@+id/printResultLabel_title"
+            android:layout_marginLeft="104dp"
+            android:layout_marginTop="50dp"
+            android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
+            android:text="18.03"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/printDoctorNameLabel_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/printResultLabel"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="5dp"
+            android:lineSpacingExtra="8sp"
+            android:text="报告医生:"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/printDoctorNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/printResultLabel"
+            android:layout_alignLeft="@+id/printDoctorNameLabel_title"
+            android:layout_marginLeft="131dp"
+            android:layout_marginTop="50dp"
+            android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
+            android:text="贾医生"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/printCheckDateLabel_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/printDoctorNameLabel"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:lineSpacingExtra="8sp"
+            android:text="检测日期:"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/printCheckDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/printDoctorNameLabel"
+            android:layout_alignLeft="@+id/printCheckDateLabel_title"
+            android:layout_marginLeft="131dp"
+            android:layout_marginTop="20dp"
+            android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
+            android:text="20190407"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/printReportDateLabel_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/printCheckDateLabel"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:lineSpacingExtra="8sp"
+            android:text="报告日期:"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/printReportDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/printCheckDateLabel"
+            android:layout_alignLeft="@+id/printReportDateLabel_title"
+            android:layout_marginLeft="129dp"
+            android:layout_marginTop="20dp"
+            android:lineSpacingExtra="8sp"
+            android:saveEnabled="false"
+            android:text="20190407"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

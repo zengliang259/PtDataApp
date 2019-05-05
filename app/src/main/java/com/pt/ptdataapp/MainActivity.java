@@ -7,33 +7,33 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.github.mjdev.libaums.UsbMassStorageDevice;
-import com.github.mjdev.libaums.fs.UsbFile;
 import com.pt.ptdataapp.Frame.FileExplorerView;
 import com.pt.ptdataapp.Frame.MainPage;
-import com.pt.ptdataapp.Frame.PrintPage;
 import com.pt.ptdataapp.Model.DataManager;
 import com.pt.ptdataapp.Model.LocalFileModel;
 import com.pt.ptdataapp.fileUtil.FileUtil;
 import com.pt.ptdataapp.fileUtil.SDCardUtil;
 import com.pt.ptdataapp.uiUtils.LoadingDialog;
+import com.pt.ptdataapp.utils.TSCUtils;
 import com.pt.ptdataapp.utils.Utils;
 import com.pt.ptdataapp.utils.usbHelper.USBBroadCastReceiver;
+import com.pt.ptdataapp.utils.usbHelper.UsbConnectionUtil;
 import com.pt.ptdataapp.utils.usbHelper.UsbHelper;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements USBBroadCastReceiver.UsbListener{
@@ -41,74 +41,39 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     private FragmentTransaction mTransaction;
     private LoadingDialog loadingDialog;
     // Pt设备厂商和产品ID
-    private int UsbProductID = 22304;
-    int UsbVendorID = 1155;
+    private int ptUsbProductID = 22304;
+    int ptUsbVendorID = 1155;
+    // 打印机设备厂商和产品ID
+    int printerUsbProductID = 13624;
+    int printerUsbVendorID = 19267;
     // pt设备数据根目录
     private String PtDataFilePathPrefix = "REC";
     /**
      * 3个Fragments
      */
-    MainPage mainPageFragemnt;
-    PrintPage printPageFragment;
+    MainPage mainPageFragment;
     FileExplorerView fileExploreFragment;
+    private View currentButton;
+    ImageButton filePageBtn;
+    ImageButton homePageBtn;
+    ImageButton printPageBtn;
     public static final int VIEW_MAIN_PAGE_INDEX = 0;
-    public static final int VIEW_PRINT_PAGE_INDEX = 1;
-    public static final int VIEW_FILE_EXPLORE_INDEX = 2;
+    public static final int VIEW_FILE_EXPLORE_INDEX = 1;
+    public static final int VIEW_FILE_DETAIL_PAGE_INDEX = 2;
     private int temp_position_index = -1;
     private UsbHelper usbHelper;
     private ArrayList<File> rootMountFileList;
 
+    private UsbDevice m_printUsbDevice;
+
     private int showDialogCount = 0;
-
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    if (temp_position_index != VIEW_MAIN_PAGE_INDEX) {
-                        mTransaction = getSupportFragmentManager().beginTransaction();
-                        mTransaction.replace(R.id.id_fragment_content, mainPageFragemnt);
-                        mTransaction.commit();
-                        temp_position_index = VIEW_MAIN_PAGE_INDEX;
-                        mainPageFragemnt.ScrollToTop();
-                    }
-                    return true;
-                case R.id.navigation_print:
-                    if (temp_position_index != VIEW_PRINT_PAGE_INDEX) {
-                        if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
-                        {
-                            mainPageFragemnt.SaveEditData();
-                        }
-                        mTransaction = getSupportFragmentManager().beginTransaction();
-                        mTransaction.replace(R.id.id_fragment_content, printPageFragment);
-                        mTransaction.commit();
-                        temp_position_index = VIEW_PRINT_PAGE_INDEX;
-                    }
-                    return true;
-                case R.id.navigation_file_explorer:
-                    if (temp_position_index != VIEW_FILE_EXPLORE_INDEX) {
-                        if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
-                        {
-                            mainPageFragemnt.SaveEditData();
-                        }
-                        mTransaction = getSupportFragmentManager().beginTransaction();
-                        mTransaction.replace(R.id.id_fragment_content, fileExploreFragment);
-                        mTransaction.commit();
-                        temp_position_index = VIEW_FILE_EXPLORE_INDEX;
-                    }
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Utils.statusBarHide(this);
+        UsbConnectionUtil.getInstance().init(this, this);
         loadingDialog = new LoadingDialog(this);
         // 1 读取本地目录数据,并初始化DataManager
         getPermission();
@@ -142,25 +107,108 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         super.onPause();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (UsbConnectionUtil.getInstance() != null)
+        {
+            UsbConnectionUtil.getInstance().closeport(1000);
+        }
+    }
     private void InitUI()
     {
         initView();
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setSelectedItemId(navigation.getMenu().getItem(1).getItemId());
+        initBtns();
     }
 
     private void initView() {
-        mainPageFragemnt = new MainPage();
-        mainPageFragemnt.SetContext(this);
-
-        printPageFragment = new PrintPage();
-        printPageFragment.SetContext(this);
+        mainPageFragment = new MainPage();
+        mainPageFragment.SetContext(this);
 
         fileExploreFragment = new FileExplorerView();
         fileExploreFragment.SetContext(this);
     }
 
+    private void initBtns() {
+        filePageBtn = (ImageButton) findViewById(R.id.file_page_btn);
+        homePageBtn = (ImageButton) findViewById(R.id.home_page_btn);
+        printPageBtn = (ImageButton) findViewById(R.id.print_btn);
+
+        filePageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (temp_position_index != VIEW_FILE_EXPLORE_INDEX) {
+                    mTransaction = getSupportFragmentManager().beginTransaction();
+                    mTransaction.replace(R.id.id_fragment_content, fileExploreFragment);
+                    mTransaction.commit();
+                    temp_position_index = VIEW_FILE_EXPLORE_INDEX;
+                }
+                setButton(v);
+            }
+        });
+
+        homePageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (temp_position_index != VIEW_MAIN_PAGE_INDEX) {
+                    mTransaction = getSupportFragmentManager().beginTransaction();
+                    mTransaction.replace(R.id.id_fragment_content, mainPageFragment);
+                    mTransaction.commit();
+                    temp_position_index = VIEW_MAIN_PAGE_INDEX;
+                    mainPageFragment.ScrollToTop();
+                }
+                setButton(v);
+            }
+        });
+
+
+        printPageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (m_printUsbDevice != null)
+                {
+                    if (UsbConnectionUtil.getInstance().hasPermission(m_printUsbDevice))
+                    {
+                        if (UsbConnectionUtil.getInstance().openPort(m_printUsbDevice)) {
+                            OnPrintClick();
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(Utils.getContext(), "正在获取Usb设备 " + m_printUsbDevice.getDeviceName() + " 权限中，请稍候再试...", Toast.LENGTH_SHORT).show();
+                        UsbConnectionUtil.getInstance().requestPermission(m_printUsbDevice);
+                    }
+                }
+                else
+                {
+                    Toast.makeText(Utils.getContext(), "未找到USB打印设备 ", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        filePageBtn.performClick();
+
+    }
+
+    private void OnPrintClick()
+    {
+        if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
+        {
+            mainPageFragment.SaveEditData();
+        }
+        Toast.makeText(Utils.getContext(), "开始打印...", Toast.LENGTH_SHORT).show();
+        List<String> printList = DataManager.getInstance().getPrintContentListCache();
+        byte[] bytes = TSCUtils.StartPrint(printList);
+        UsbConnectionUtil.getInstance().sendMessage(bytes);
+    }
+
+    private void setButton(View v) {
+        if (currentButton != null && currentButton.getId() != v.getId()) {
+            currentButton.setEnabled(true);
+        }
+        v.setEnabled(false);
+        currentButton = v;
+    }
 
     // --------------------权限-------------
     void getPermission()
@@ -188,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 DataManager.getInstance().InitFromLocalFile();
                 if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
                 {
-                    mainPageFragemnt.NotifyListDataRefresh();
+                    mainPageFragment.NotifyListDataRefresh();
                 }
                 HideDialog();
             }
@@ -210,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     private void InitUSB()
     {
         initUsbFile();
+        initPrintUsb();
         // 数据读取并存储本地
         AsyncCopyMountFile();
     }
@@ -222,12 +271,19 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         updateUsbFile();
     }
 
-    private void TestInsertUSB()
+    private void initPrintUsb()
     {
-        if (rootMountFileList.size() == 0) {
-            File testFile = new File(Environment.getExternalStorageDirectory(), "REC");
-            rootMountFileList.add(testFile);
-            AsyncCopyMountFile();
+        if (m_printUsbDevice == null)
+        {
+            m_printUsbDevice = UsbConnectionUtil.getInstance().getUsbDevice(printerUsbVendorID, printerUsbProductID);
+            // 获取权限
+            if (m_printUsbDevice != null)
+            {
+                if (!UsbConnectionUtil.getInstance().hasPermission(m_printUsbDevice))
+                {
+                    UsbConnectionUtil.getInstance().requestPermission(m_printUsbDevice);
+                }
+            }
         }
     }
 
@@ -240,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         UsbMassStorageDevice targetDevice = null;
         for(UsbMassStorageDevice device : usbMassStorageDevices)
         {
-            if (IsTargetPrintUSB(device.getUsbDevice()))
+            if (IsTargetPtUSB(device.getUsbDevice()))
             {
                 targetDevice = device;
             }
@@ -327,7 +383,16 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     }
     private boolean IsTargetPrintUSB(UsbDevice device)
     {
-        if (device != null && device.getProductId() == UsbProductID && device.getVendorId() == UsbVendorID)
+        if (device != null && device.getProductId() == printerUsbProductID && device.getVendorId() == printerUsbVendorID)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean IsTargetPtUSB(UsbDevice device)
+    {
+        if (device != null && device.getProductId() == ptUsbProductID && device.getVendorId() == ptUsbVendorID)
         {
             return true;
         }
@@ -386,8 +451,12 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     LocalFileModel.getInstance().AddLocalFiles(destFilePath);
                     if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
                     {
-                        mainPageFragemnt.NotifyListDataRefresh();
-                        mainPageFragemnt.ScrollToTop();
+                        mainPageFragment.NotifyListDataRefresh();
+                        mainPageFragment.ScrollToTop();
+                    }
+                    else
+                    {
+                        homePageBtn.performClick();
                     }
                 }
                 catch (Exception e)
@@ -439,26 +508,32 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
 
     @Override
     public void insertUsb(UsbDevice device_add) {
+        Toast.makeText(Utils.getContext(), "检测到USB设备插入... ", Toast.LENGTH_SHORT).show();
         if (IsTargetPrintUSB(device_add))
         {
-            Toast.makeText(Utils.getContext(), "检测到USB设备插入... ", Toast.LENGTH_SHORT).show();
+            m_printUsbDevice = device_add;
         }
-
     }
 
     @Override
     public void removeUsb(UsbDevice device_remove) {
         if (IsTargetPrintUSB(device_remove)) {
             Toast.makeText(Utils.getContext(), "检测到USB设备拔出... ", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, device_remove.getDeviceName() + " remove");
+            Log.d(TAG, device_remove.getDeviceName()+" remove");
+            if (UsbConnectionUtil.getInstance() != null)
+            {
+                UsbConnectionUtil.getInstance().closeport(1000);
+            }
+            m_printUsbDevice = null;
         }
     }
 
     @Override
     public void getReadUsbPermission(UsbDevice usbDevice) {
+        Toast.makeText(Utils.getContext(), "获取USB设备权限成功 ", Toast.LENGTH_SHORT).show();
         if (IsTargetPrintUSB(usbDevice))
         {
-            Toast.makeText(Utils.getContext(), "获取USB设备权限成功 ", Toast.LENGTH_SHORT).show();
+            m_printUsbDevice = usbDevice;
         }
     }
 

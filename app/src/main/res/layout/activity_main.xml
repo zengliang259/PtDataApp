@@ -10,21 +10,48 @@
         android:id="@+id/id_fragment_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/navigation"></FrameLayout>
+        android:layout_above="@+id/buttom_bar_group"></FrameLayout>
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
+    <LinearLayout
+        android:id="@+id/buttom_bar_group"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation">
+        app:layout_constraintRight_toRightOf="parent">
 
-    </android.support.design.widget.BottomNavigationView>
+        <RelativeLayout style="@style/ButtomBar">
+
+            <ImageButton
+                android:id="@+id/file_page_btn"
+                style="@style/ButtomBarImgBtn"
+                android:background="@drawable/folder_btn_img"
+                android:contentDescription="@string/app_name" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/ButtomBar">
+
+            <ImageButton
+                android:id="@+id/home_page_btn"
+                style="@style/ButtomBarImgBtn"
+                android:background="@drawable/home_img"
+                android:contentDescription="@string/app_name" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/ButtomBar">
+
+            <ImageButton
+                android:id="@+id/print_btn"
+                style="@style/ButtomBarImgBtn"
+                android:background="@drawable/print_img"
+                android:contentDescription="@string/app_name" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

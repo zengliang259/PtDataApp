@@ -2,6 +2,8 @@ package com.pt.ptdataapp.fileUtil;
 
 import com.pt.ptdataapp.Model.PatientInfo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +53,11 @@ public class FileDataReader
         {
             matchCode = MatchImportantData(splitStrs[i], info, matchCode);
         }
+        // 报告时间获取系统时间
+        Date dt = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        info.reportDate = sdf.format(dt);
+
         return info;
     }
 
