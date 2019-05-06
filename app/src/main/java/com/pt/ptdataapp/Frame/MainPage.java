@@ -7,10 +7,12 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -184,11 +186,27 @@ public class MainPage extends Fragment {
             PatientInfo pInfo = mAList.get(position);
             if (pInfo != null) {
                 holder.titleLabel.setText(pInfo.title);
+                int inputType = (pInfo.ID.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_NUMBER;
+                holder.IDLabel.setInputType(inputType);
                 holder.IDLabel.setText(pInfo.ID);
+
+                inputType = (pInfo.patientName.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
+                holder.patientNameLabel.setInputType(inputType);
                 holder.patientNameLabel.setText(pInfo.patientName);
+
+                inputType = (pInfo.checkResult.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_NUMBER;
+                holder.resultLabel.setInputType(inputType);
                 holder.resultLabel.setText(pInfo.checkResult);
+
+                inputType = (pInfo.doctorName.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
+                holder.doctorNameLabel.setInputType(inputType);
                 holder.doctorNameLabel.setText(pInfo.doctorName);
+
+                inputType = (pInfo.checkDate.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
+                holder.checkDateLabel.setInputType(inputType);
                 holder.checkDateLabel.setText(pInfo.checkDate);
+
+                holder.reportDateLabel.setInputType(InputType.TYPE_NULL);
                 holder.reportDateLabel.setText(pInfo.reportDate);
             }
         }
@@ -211,12 +229,12 @@ public class MainPage extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             RelativeLayout rootView;
-            TextView IDLabel;
+            EditText IDLabel;
             TextView titleLabel;
-            TextView patientNameLabel;
-            TextView resultLabel;
-            TextView doctorNameLabel;
-            TextView checkDateLabel;
+            EditText patientNameLabel;
+            EditText resultLabel;
+            EditText doctorNameLabel;
+            EditText checkDateLabel;
             TextView reportDateLabel;
 
             public ViewHolder(View itemView) {

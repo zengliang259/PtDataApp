@@ -66,6 +66,14 @@
             android:textColor="@color/colorAccent"
             android:textSize="24sp" />
 
+        <View
+            android:id="@+id/black_line2"
+            android:layout_width="300dp"
+            android:layout_height="2dp"
+            android:layout_below="@+id/printIDLabel"
+            android:layout_marginLeft="66dp"
+            android:background="#000000"></View>
+
         <TextView
             android:id="@+id/printPatientNameLabel_title"
             android:layout_width="wrap_content"
@@ -86,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/printIDLabel"
             android:layout_alignLeft="@+id/printPatientNameLabel_title"
-            android:layout_marginLeft="71dp"
+            android:layout_marginLeft="70dp"
             android:layout_marginTop="20dp"
             android:lineSpacingExtra="8sp"
             android:saveEnabled="false"
@@ -94,6 +102,14 @@
             android:textAlignment="viewStart"
             android:textColor="@color/colorAccent"
             android:textSize="30sp" />
+
+        <View
+            android:id="@+id/black_line3"
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:layout_below="@+id/printPatientNameLabel"
+            android:layout_marginLeft="100dp"
+            android:background="#000000"></View>
 
         <TextView
             android:id="@+id/printResultLabel_title"
@@ -145,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/printResultLabel"
             android:layout_alignLeft="@+id/printDoctorNameLabel_title"
-            android:layout_marginLeft="131dp"
+            android:layout_marginLeft="130dp"
             android:layout_marginTop="50dp"
             android:lineSpacingExtra="8sp"
             android:saveEnabled="false"
@@ -153,6 +169,14 @@
             android:textAlignment="textStart"
             android:textColor="@color/colorAccent"
             android:textSize="30sp" />
+
+        <View
+            android:id="@+id/black_line4"
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:layout_below="@+id/printDoctorNameLabel"
+            android:layout_marginLeft="160dp"
+            android:background="#000000"></View>
 
         <TextView
             android:id="@+id/printCheckDateLabel_title"
@@ -173,7 +197,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/printDoctorNameLabel"
             android:layout_alignLeft="@+id/printCheckDateLabel_title"
-            android:layout_marginLeft="131dp"
+            android:layout_marginLeft="130dp"
             android:layout_marginTop="20dp"
             android:lineSpacingExtra="8sp"
             android:saveEnabled="false"
@@ -181,6 +205,14 @@
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="30sp" />
+
+        <View
+            android:id="@+id/black_line5"
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:layout_below="@+id/printCheckDateLabel"
+            android:layout_marginLeft="160dp"
+            android:background="#000000"></View>
 
         <TextView
             android:id="@+id/printReportDateLabel_title"
@@ -209,6 +241,14 @@
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="30sp" />
+
+        <View
+            android:id="@+id/black_line6"
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:layout_below="@+id/printReportDateLabel"
+            android:layout_marginLeft="160dp"
+            android:background="#000000"></View>
 
     </RelativeLayout>
 
