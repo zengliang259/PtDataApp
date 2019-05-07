@@ -153,12 +153,12 @@ public class MainPage extends Fragment {
         {
             List<String> printList = new ArrayList<>();
             printList.add(viewHolder.titleLabel.getText().toString());
-            printList.add(viewHolder.IDLabel.getText().toString());
-            printList.add(viewHolder.patientNameLabel.getText().toString());
-            printList.add(viewHolder.resultLabel.getText().toString());
-            printList.add(viewHolder.doctorNameLabel.getText().toString());
-            printList.add(viewHolder.checkDateLabel.getText().toString());
-            printList.add(viewHolder.reportDateLabel.getText().toString());
+            printList.add("ID:" + viewHolder.IDLabel.getText().toString());
+            printList.add("姓名:" + viewHolder.patientNameLabel.getText().toString());
+            printList.add("INR:" + viewHolder.resultLabel.getText().toString());
+            printList.add("报告医生:" + viewHolder.doctorNameLabel.getText().toString());
+            printList.add("检测日期:" + viewHolder.checkDateLabel.getText().toString());
+            printList.add("报告日期:" + viewHolder.reportDateLabel.getText().toString());
             DataManager.getInstance().SavePrintContentList(printList);
         }
 

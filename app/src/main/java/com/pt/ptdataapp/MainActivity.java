@@ -195,11 +195,15 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
         {
             mainPageFragment.SaveEditData();
+            Toast.makeText(Utils.getContext(), "开始打印...", Toast.LENGTH_SHORT).show();
+            List<String> printList = DataManager.getInstance().getPrintContentListCache();
+            byte[] bytes = TSCUtils.StartPrint(printList);
+            UsbConnectionUtil.getInstance().sendMessage(bytes);
         }
-        Toast.makeText(Utils.getContext(), "开始打印...", Toast.LENGTH_SHORT).show();
-        List<String> printList = DataManager.getInstance().getPrintContentListCache();
-        byte[] bytes = TSCUtils.StartPrint(printList);
-        UsbConnectionUtil.getInstance().sendMessage(bytes);
+       else
+        {
+            Toast.makeText(Utils.getContext(), "主页才可以打印数据", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setButton(View v) {

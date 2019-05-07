@@ -24,6 +24,7 @@ public class TSCUtils {
     public static String Align_Left = "1B6100";
     public static String Align_Center = "1B6101";
     public static String Font_Size = "1D21";
+    public static String Left_Empty = "1D4C"; // 1d 4c nL nH
     /**
      * 打印机初始化
      * printContentList 固定长度7，包含要打印的内容
@@ -38,36 +39,94 @@ public class TSCUtils {
         cmdStr += Paper_EnterLine;
         cmdStr += StringUtil.ByteToHexString((byte) 2);
         // 测试
-        for(int i = 0, len = printContentList.size(); i < len; i ++)
+
+        String content = printContentList.get(0);
+        // 标题特殊处理
+        cmdStr += Align_Center;
+        cmdStr += Bold;
+        cmdStr += Font_Size;
+        cmdStr += StringUtil.ByteToHexString((byte) 17);
+        cmdStr += GetSingleTextCmdStr(content);
+        cmdStr += Paper_EnterPoint;
+        cmdStr += StringUtil.ByteToHexString((byte) 50);
+        cmdStr += Bold_Cancel;
+        cmdStr += Horizontal_Line;
+        cmdStr += Horizontal_Line;
+        cmdStr += Horizontal_Line;
+        cmdStr += Horizontal_Line;
+        cmdStr += Horizontal_Line;
+        cmdStr += Horizontal_Line;
+        cmdStr += Paper_EnterLine;
+        cmdStr += StringUtil.ByteToHexString((byte) 2);
+        // ID
+        content = printContentList.get(1);
+        cmdStr += Align_Left;
+        cmdStr += Font_Size;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+//        cmdStr += Left_Empty;
+//        cmdStr += StringUtil.ByteToHexString((byte) 20);
+//        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += GetSingleTextCmdStr(content);
+        cmdStr += Paper_EnterPoint;
+        cmdStr += StringUtil.ByteToHexString((byte) 10);
+        cmdStr += Horizontal_Line;
+        cmdStr += Horizontal_Line;
+        cmdStr += Horizontal_Line;
+        cmdStr += Paper_EnterLine;
+        cmdStr += StringUtil.ByteToHexString((byte) 2);
+
+        // 姓名
+        content = printContentList.get(2);
+        cmdStr += Align_Left;
+        cmdStr += Font_Size;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+//        cmdStr += Left_Empty;
+//        cmdStr += StringUtil.ByteToHexString((byte) 20);
+//        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += GetSingleTextCmdStr(content);
+        cmdStr += Paper_EnterPoint;
+        cmdStr += StringUtil.ByteToHexString((byte) 10);
+        cmdStr += Horizontal_Line;
+        cmdStr += Horizontal_Line;
+        cmdStr += Horizontal_Line;
+        cmdStr += Paper_EnterLine;
+        cmdStr += StringUtil.ByteToHexString((byte) 2);
+
+        // INR
+        content = printContentList.get(3);
+        cmdStr += Align_Left;
+        cmdStr += Bold;
+        cmdStr += Font_Size;
+        cmdStr += StringUtil.ByteToHexString((byte) 17);
+//        cmdStr += Left_Empty;
+//        cmdStr += StringUtil.ByteToHexString((byte) 20);
+//        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += GetSingleTextCmdStr(content);
+        cmdStr += Bold_Cancel;
+        cmdStr += Paper_EnterPoint;
+        cmdStr += StringUtil.ByteToHexString((byte) 10);
+        cmdStr += Paper_EnterLine;
+        cmdStr += StringUtil.ByteToHexString((byte) 2);
+        for(int i = 4, len = printContentList.size(); i < len; i ++)
         {
-            String content = printContentList.get(i);
-            // 标题特殊处理
-            if (i == 0)
-            {
-                cmdStr += Align_Center;
-                cmdStr += Bold;
-                cmdStr += Font_Size;
-                cmdStr += StringUtil.ByteToHexString((byte) 17);
-                cmdStr += GetSingleTextCmdStr(content);
-                cmdStr += Paper_EnterPoint;
-                cmdStr += StringUtil.ByteToHexString((byte) 10);
-                cmdStr += Bold_Cancel;
-            }
-            else
-            {
-                cmdStr += Align_Left;
-                cmdStr += Font_Size;
-                cmdStr += StringUtil.ByteToHexString((byte) 0);
-                cmdStr += GetSingleTextCmdStr(content);
-                cmdStr += Paper_EnterPoint;
-                cmdStr += StringUtil.ByteToHexString((byte) 10);
-                cmdStr += Horizontal_Line;
-                cmdStr += Horizontal_Line;
-                cmdStr += Horizontal_Line;
-            }
+            content = printContentList.get(i);
+            cmdStr += Align_Left;
+            cmdStr += Font_Size;
+            cmdStr += StringUtil.ByteToHexString((byte) 0);
+//            cmdStr += Left_Empty;
+//            cmdStr += StringUtil.ByteToHexString((byte) 20);
+//            cmdStr += StringUtil.ByteToHexString((byte) 0);
+            cmdStr += GetSingleTextCmdStr(content);
+            cmdStr += Paper_EnterPoint;
+            cmdStr += StringUtil.ByteToHexString((byte) 10);
+            cmdStr += Horizontal_Line;
+            cmdStr += Horizontal_Line;
+            cmdStr += Horizontal_Line;
+
             cmdStr += Paper_EnterLine;
             cmdStr += StringUtil.ByteToHexString((byte) 2);
         }
+
         // 切纸
         cmdStr += Cut_Paper;
         cmdStr += StringUtil.ByteToHexString((byte) 2);

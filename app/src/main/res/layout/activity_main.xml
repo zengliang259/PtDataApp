@@ -6,11 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
     <FrameLayout
         android:id="@+id/id_fragment_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/buttom_bar_group"></FrameLayout>
+        android:layout_height="836dp"
+        android:layout_above="@+id/buttom_bar_group"
+        android:layout_marginBottom="120dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp"></FrameLayout>
 
     <LinearLayout
         android:id="@+id/buttom_bar_group"
