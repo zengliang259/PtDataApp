@@ -41,7 +41,7 @@
 
     <EditText
         android:id="@+id/IDLabel"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/black_line"
         android:layout_alignLeft="@+id/IDLabel_title"
