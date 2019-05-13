@@ -29,7 +29,7 @@ public class TSCUtils {
     public static String Left_Empty = "1D4C"; // 1d 4c nL nH
     public static String UnderLine_Start1 = "1C2D"; // 1C 2D 02 下划线高度02
     public static String UnderLine_Start2 = "1B2D"; // 1C 2D 02 下划线高度02  1C 2D 00 取消
-    public static String UnderLine_End = "0D0A";
+    public static String UnderLine_End = "200D0A";
     public static String Indentation = "1B24"; // 1B 24 29 00 缩进29h
 
     public static String IDStr = "ID:";
@@ -59,7 +59,7 @@ public class TSCUtils {
         cmdStr += Font_Size;
         cmdStr += StringUtil.ByteToHexString((byte) 17);
         String content = printContentList.get(0);
-        cmdStr += GetSingleTextCmdStr("", content, false);
+        cmdStr += GetSingleTextCmdStr("", content, 0);
 
         cmdStr += Horizontal_Line;
         cmdStr += Horizontal_Line;
@@ -74,29 +74,37 @@ public class TSCUtils {
         cmdStr += Font_Size;
         cmdStr += StringUtil.ByteToHexString((byte) 17);
         content = printContentList.get(1);
-        cmdStr += GetSingleTextCmdStr(IDStr, content, true);
+        cmdStr += GetSingleTextCmdStr(IDStr, content, 2);
 
         // 姓名
+        cmdStr += UnderLine_Start1;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += UnderLine_Start2;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
         cmdStr += Indent(41, 0);
         content = printContentList.get(2);
-        cmdStr += GetSingleTextCmdStr(NameStr, content, true);
+        cmdStr += GetSingleTextCmdStr(NameStr, content, 1);
         cmdStr += EnterPaperLine(1);
 
         // INR
         cmdStr += Font_Size;
         cmdStr += StringUtil.ByteToHexString((byte)51);
+        cmdStr += UnderLine_Start1;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
         cmdStr += UnderLine_Start2;
         cmdStr += StringUtil.ByteToHexString((byte) 0); // 取消下划线
         cmdStr += Bold;
         cmdStr += Indent(41, 0);
         content = printContentList.get(3);
-        cmdStr += GetSingleTextCmdStr(INRStr, content, false);
+        cmdStr += GetSingleTextCmdStr(INRStr, content, 0);
         cmdStr += EnterPaperLine(1);
 
         cmdStr += Bold_Cancel;
         cmdStr += "1B2101"; // 字符方式，压缩ascci
         cmdStr += Font_Size;
         cmdStr += StringUtil.ByteToHexString((byte) 17);
+        cmdStr += UnderLine_Start2;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
         cmdStr += UnderLine_Start1;
         cmdStr += StringUtil.ByteToHexString((byte) 0);
         cmdStr += Bold_Cancel;
@@ -104,21 +112,26 @@ public class TSCUtils {
         // 报告医生
         cmdStr += Indent(41,0);
         content = printContentList.get(4);
-        cmdStr += GetSingleTextCmdStr(DoctorNameStr,content,true);
+        cmdStr += GetSingleTextCmdStr(DoctorNameStr,content,1);
         cmdStr += UnderLine_Start1;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += UnderLine_Start2;
         cmdStr += StringUtil.ByteToHexString((byte) 0);
 
         // 检测日期
 
         cmdStr += Indent(41,0);
         content = printContentList.get(5);
-        cmdStr += GetSingleTextCmdStr(CheckDateStr,content,true);
-
+        cmdStr += GetSingleTextCmdStr(CheckDateStr,content,2);
+        cmdStr += UnderLine_Start1;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += UnderLine_Start2;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
         // 报告日期
 
         cmdStr += Indent(41,0);
         content = printContentList.get(6);
-        cmdStr += GetSingleTextCmdStr(ReportDateStr,content,true);
+        cmdStr += GetSingleTextCmdStr(ReportDateStr,content,2);
         // 切纸
         cmdStr += Cut_Paper;
         cmdStr += StringUtil.ByteToHexString((byte) 2);
@@ -147,7 +160,7 @@ public class TSCUtils {
         return cmdStr;
     }
 
-    private static String GetSingleTextCmdStr(String titleText, String printText, boolean needUnderLine)
+    private static String GetSingleTextCmdStr(String titleText, String printText, int needUnderLineCode)
     {
         String cmdStr = "";
         cmdStr += Set_Chinese;
@@ -157,8 +170,10 @@ public class TSCUtils {
             cmdStr += StringUtil.StringToHexString(titleText);
         }
         String emptyStr = "";
-        if (needUnderLine)
+        if (needUnderLineCode > 0)
         {
+            cmdStr += UnderLine_Start1;
+            cmdStr += StringUtil.ByteToHexString((byte) 2);
             cmdStr += UnderLine_Start2;
             cmdStr += StringUtil.ByteToHexString((byte) 2);
             if (printText.length() == 0)

@@ -7,6 +7,8 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -59,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     ImageButton printPageBtn;
     public static final int VIEW_MAIN_PAGE_INDEX = 0;
     public static final int VIEW_FILE_EXPLORE_INDEX = 1;
-    public static final int VIEW_FILE_DETAIL_PAGE_INDEX = 2;
     private int temp_position_index = -1;
     private UsbHelper usbHelper;
     private ArrayList<File> rootMountFileList;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     private UsbDevice m_printUsbDevice;
 
     private int showDialogCount = 0;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +77,30 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         Utils.statusBarHide(this);
         UsbConnectionUtil.getInstance().init(this, this);
         loadingDialog = new LoadingDialog(this);
+        InitHandler();
         // 1 读取本地目录数据,并初始化DataManager
         getPermission();
         // 2 USB读取数据
         InitUSB();
         // 3 UI初始化
         InitUI();
+    }
+
+    private void InitHandler()
+    {
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 1:
+                        homePageBtn.performClick();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
     }
 
     @Override
@@ -195,14 +215,18 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
         {
             mainPageFragment.SaveEditData();
-            Toast.makeText(Utils.getContext(), "开始打印...", Toast.LENGTH_SHORT).show();
-            List<String> printList = DataManager.getInstance().getPrintContentListCache();
+        }
+       else if(temp_position_index == VIEW_FILE_EXPLORE_INDEX)
+        {
+            fileExploreFragment.SaveEditData();
+            // Toast.makeText(Utils.getContext(), "主页才可以打印数据", Toast.LENGTH_SHORT).show();
+        }
+        Toast.makeText(Utils.getContext(), "开始打印...", Toast.LENGTH_SHORT).show();
+        List<String> printList = DataManager.getInstance().getPrintContentListCache();
+        if(printList.size() > 0)
+        {
             byte[] bytes = TSCUtils.StartPrint(printList);
             UsbConnectionUtil.getInstance().sendMessage(bytes);
-        }
-       else
-        {
-            Toast.makeText(Utils.getContext(), "主页才可以打印数据", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -460,7 +484,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     }
                     else
                     {
-                        homePageBtn.performClick();
+                        mHandler.sendEmptyMessage(1);
                     }
                 }
                 catch (Exception e)

@@ -88,14 +88,15 @@
             android:textColor="@color/colorAccent"
             android:textSize="45sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/printPatientNameLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="336dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/printIDLabel"
             android:layout_alignLeft="@+id/printPatientNameLabel_title"
             android:layout_marginLeft="104dp"
             android:layout_marginTop="36dp"
+            android:background="@null"
             android:lineSpacingExtra="8sp"
             android:saveEnabled="false"
             android:text="李木匠222"
@@ -156,14 +157,15 @@
             android:textColor="@color/colorAccent"
             android:textSize="45sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/printDoctorNameLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/printResultLabel"
             android:layout_alignLeft="@+id/printDoctorNameLabel_title"
             android:layout_marginLeft="198dp"
             android:layout_marginTop="50dp"
+            android:background="@null"
             android:lineSpacingExtra="8sp"
             android:saveEnabled="false"
             android:text="贾医生"

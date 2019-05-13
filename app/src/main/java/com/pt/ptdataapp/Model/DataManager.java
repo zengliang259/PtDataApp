@@ -62,7 +62,7 @@ public class DataManager {
         for (Map.Entry<String, Long> kv : sortedFileList)
         {
             String content = FileUtil.getEncryptFile(kv.getKey());
-            Log.d(TAG,content);
+//            Log.d(TAG,content);
             if (content != null)
             {
                 patients.add(FileDataReader.Read(content));

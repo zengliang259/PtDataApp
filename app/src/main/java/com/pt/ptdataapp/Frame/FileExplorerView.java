@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,20 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.pt.ptdataapp.Model.DataManager;
 import com.pt.ptdataapp.Model.FileEntity;
 import com.pt.ptdataapp.Model.LocalFileModel;
 import com.pt.ptdataapp.Model.PatientInfo;
 import com.pt.ptdataapp.R;
 import com.pt.ptdataapp.fileUtil.FileDataReader;
 import com.pt.ptdataapp.fileUtil.FileUtil;
+import com.pt.ptdataapp.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -146,11 +151,35 @@ public class FileExplorerView extends Fragment {
         PatientInfo pInfo = FileDataReader.Read(fileContent);
         titleLabel.setText(pInfo.title);
         IDLabel.setText(pInfo.ID);
-        patientNameLabel.setText(pInfo.patientName);
         resultLabel.setText(pInfo.checkResult);
-        doctorNameLabel.setText(pInfo.doctorName);
         checkDateLabel.setText(pInfo.checkDate);
         reportDateLabel.setText(pInfo.reportDate);
+        int inputType = (pInfo.patientName.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
+        patientNameLabel.setInputType(inputType);
+        patientNameLabel.setText(pInfo.patientName);
+        inputType = (pInfo.doctorName.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
+        doctorNameLabel.setInputType(inputType);
+        doctorNameLabel.setText(pInfo.doctorName);
+    }
+
+    public void SaveEditData()
+    {
+        List<String> printList = new ArrayList<>();
+        if (mFileContentView.getVisibility() == View.VISIBLE)
+        {
+            printList.add(titleLabel.getText().toString());
+            printList.add(IDLabel.getText().toString());
+            printList.add(patientNameLabel.getText().toString());
+            printList.add(resultLabel.getText().toString());
+            printList.add(doctorNameLabel.getText().toString());
+            printList.add(checkDateLabel.getText().toString());
+            printList.add(reportDateLabel.getText().toString());
+        }
+        else
+        {
+            Toast.makeText(Utils.getContext(), "请选择要打印的文件...", Toast.LENGTH_SHORT).show();
+        }
+        DataManager.getInstance().SavePrintContentList(printList);
     }
 
     public void onBackPressed() {
@@ -191,11 +220,19 @@ public class FileExplorerView extends Fragment {
                     ((Activity)mContext).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            String fileContent = FileUtil.getEncryptFile(entity.getFilePath());
-                            Message msg = new Message();
-                            msg.what = 2;
-                            msg.obj = fileContent;
-                            mHandler.sendMessage(msg);
+                            if(!entity.getFileName().contains("id.txt"))
+                            {
+                                String fileContent = FileUtil.getEncryptFile(entity.getFilePath());
+                                Message msg = new Message();
+                                msg.what = 2;
+                                msg.obj = fileContent;
+                                mHandler.sendMessage(msg);
+                            }
+                            else
+                            {
+                                String fileContent = FileUtil.getFile(entity.getFilePath());
+                                Toast.makeText(Utils.getContext(), "设备ID:"+fileContent, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }
