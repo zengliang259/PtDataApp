@@ -185,24 +185,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         printPageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (m_printUsbDevice != null)
-                {
-                    if (UsbConnectionUtil.getInstance().hasPermission(m_printUsbDevice))
-                    {
-                        if (UsbConnectionUtil.getInstance().openPort(m_printUsbDevice)) {
-                            OnPrintClick();
-                        }
-                    }
-                    else
-                    {
-                        Toast.makeText(Utils.getContext(), "正在获取Usb设备 " + m_printUsbDevice.getDeviceName() + " 权限中，请稍候再试...", Toast.LENGTH_SHORT).show();
-                        UsbConnectionUtil.getInstance().requestPermission(m_printUsbDevice);
-                    }
-                }
-                else
-                {
-                    Toast.makeText(Utils.getContext(), "未找到USB打印设备 ", Toast.LENGTH_SHORT).show();
-                }
+                OnPrintClick();
             }
         });
 
@@ -221,12 +204,30 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
             fileExploreFragment.SaveEditData();
             // Toast.makeText(Utils.getContext(), "主页才可以打印数据", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(Utils.getContext(), "开始打印...", Toast.LENGTH_SHORT).show();
+
         List<String> printList = DataManager.getInstance().getPrintContentListCache();
         if(printList.size() > 0)
         {
-            byte[] bytes = TSCUtils.StartPrint(printList);
-            UsbConnectionUtil.getInstance().sendMessage(bytes);
+            if (m_printUsbDevice != null)
+            {
+                if (UsbConnectionUtil.getInstance().hasPermission(m_printUsbDevice))
+                {
+                    if (UsbConnectionUtil.getInstance().openPort(m_printUsbDevice)) {
+                        Toast.makeText(Utils.getContext(), "开始打印...", Toast.LENGTH_SHORT).show();
+                        byte[] bytes = TSCUtils.StartPrint(printList);
+                        UsbConnectionUtil.getInstance().sendMessage(bytes);
+                    }
+                }
+                else
+                {
+                    Toast.makeText(Utils.getContext(), "正在获取Usb设备 " + m_printUsbDevice.getDeviceName() + " 权限中，请稍候再试...", Toast.LENGTH_SHORT).show();
+                    UsbConnectionUtil.getInstance().requestPermission(m_printUsbDevice);
+                }
+            }
+            else
+            {
+                Toast.makeText(Utils.getContext(), "未找到USB打印设备 ", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
