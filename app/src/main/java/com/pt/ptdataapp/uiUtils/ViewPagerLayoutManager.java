@@ -60,7 +60,6 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
     public void onLayoutChildren(Recycler recycler, State state) {
         super.onLayoutChildren(recycler, state);
     }
-
     public void onScrollStateChanged(int state) {
         switch(state) {
             case 0:

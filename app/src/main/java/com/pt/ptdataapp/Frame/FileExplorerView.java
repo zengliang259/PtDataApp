@@ -61,6 +61,23 @@ public class FileExplorerView extends Fragment {
     public FileExplorerView() {
         // Required empty public constructor
     }
+    //1、定义接口
+    public interface OnFileClick {
+        public void onClick(File clickFile);
+    }
+    private OnFileClick onFileClick;//2、定义接口成员变量
+    //定义接口变量的get方法
+    public OnFileClick getOnFileClick() {
+        return onFileClick;
+    }
+    //定义接口变量的set方法
+    public void setOnFileClick(OnFileClick onFileClick) {
+        this.onFileClick = onFileClick;
+    }
+
+
+
+
     public void SetContext(Context context)
     {
         mContext = context;
@@ -116,11 +133,14 @@ public class FileExplorerView extends Fragment {
 
                             break;
                         case 2:
-                            mListView.setVisibility(View.INVISIBLE);
-                            mFileContentView.setVisibility(View.VISIBLE);
-                            if (msg.obj != null)
-                            {
-                                ShowFileDetailInfo((String)msg.obj);
+//                            mListView.setVisibility(View.INVISIBLE);
+//                            mFileContentView.setVisibility(View.VISIBLE);
+//                            if (msg.obj != null)
+//                            {
+//                                ShowFileDetailInfo((String)msg.obj);
+//                            }
+                            if(onFileClick !=null){
+                                onFileClick.onClick((File)msg.obj);
                             }
 
                             break;
@@ -222,10 +242,10 @@ public class FileExplorerView extends Fragment {
                         public void run() {
                             if(!entity.getFileName().contains("id.txt"))
                             {
-                                String fileContent = FileUtil.getEncryptFile(entity.getFilePath());
+//                                String fileContent = FileUtil.getEncryptFile(entity.getFilePath());
                                 Message msg = new Message();
                                 msg.what = 2;
-                                msg.obj = fileContent;
+                                msg.obj = new File(entity.getFilePath());
                                 mHandler.sendMessage(msg);
                             }
                             else

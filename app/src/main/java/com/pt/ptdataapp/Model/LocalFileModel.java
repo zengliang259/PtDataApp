@@ -27,20 +27,15 @@ public class LocalFileModel {
     }
     // 文件索引map, key：文件名， value:文件路径
     private Map<String,Long> fileMap = new HashMap<String,Long>();
-    // 文件目录索引 key是一级目录，value 是目录下的文件列表
-    private Map<String, List<String>> fileDirMap = new HashMap<String, List<String>>();
+    public Map<String, Long> getFileMap() { return fileMap;}
+    // 目录下的设备根文件列表
+    private Map<String, Long> fileDirMap = new HashMap<>();
+    public Map<String, Long> getFileDirMap() { return fileDirMap; }
 
-    public Map<String, Long> getFileMap()
-    {
-        return fileMap;
-    }
     private List<Map.Entry<String, Long>> sortedFileList = new ArrayList<>();
     public List<Map.Entry<String, Long>> getSortedFileList(){return sortedFileList;}
 
-    public Map<String, List<String>> getDirMap()
-    {
-        return fileDirMap;
-    }
+    private File curWorkFolder;
 
     private List<String> idFilePaths = new ArrayList<>();
     public Map<String, String> idFileMap = new HashMap<String, String>();
@@ -50,19 +45,44 @@ public class LocalFileModel {
             return ;
         }
         Log.d(TAG,"InitLocalFiles " + rootDir.getAbsolutePath());
-        idFilePaths.clear();
-        idFileMap.clear();
-        ReadFilesLoop(rootDir);
-        SortFileMap();
-        for (String idfilePath: idFilePaths)
+        fileDirMap.clear();
+        File[] dirs = rootDir.listFiles();
+
+        long newModifyTime = 0;
+        File lastModifyFolder = null;
+        if(dirs != null)
         {
-            String content = FileUtil.getFile(idfilePath);
-            if (content != null)
+            for(File item : dirs)
             {
-                File file = new File(idfilePath);
-                idFileMap.put(content, file.getParent());
+                long modifyTime = item.lastModified();
+                fileDirMap.put(item.getName(), modifyTime);
+                if (newModifyTime < modifyTime)
+                {
+                    newModifyTime = modifyTime;
+                    lastModifyFolder = item;
+                }
             }
         }
+        if (lastModifyFolder != null)
+        {
+            // 文件id索引
+            idFilePaths.clear();
+            idFileMap.clear();
+            fileMap.clear();
+            curWorkFolder = lastModifyFolder;
+            ReadFilesLoop(lastModifyFolder);
+            SortFileMap();
+            for (String idfilePath: idFilePaths)
+            {
+                String content = FileUtil.getFile(idfilePath);
+                if (content != null)
+                {
+                    File file = new File(idfilePath);
+                    idFileMap.put(content, file.getParent());
+                }
+            }
+        }
+
     }
 
     public void AddLocalFiles(String dirPath)
@@ -72,29 +92,23 @@ public class LocalFileModel {
             return ;
         }
         Log.d(TAG,"AddLocalFiles " + rootDir.getAbsolutePath());
-        // 先删除改目录之前的文件索引
-        List<String> deleteFilePaths = fileDirMap.get(rootDir.getName());
-        if (deleteFilePaths != null)
+        if (curWorkFolder == null
+                || !curWorkFolder.getAbsolutePath().equals(rootDir.getAbsolutePath()))
         {
-            for (String filePath : deleteFilePaths)
-            {
-                fileMap.remove(filePath);
+            // 先删除改目录之前的文件索引
+            fileDirMap.put(rootDir.getName(), rootDir.lastModified());
+            fileMap.clear();
+            ReadFilesLoop(rootDir);
+            SortFileMap();
+            for (String idfilePath : idFilePaths) {
+                String content = FileUtil.getFile(idfilePath);
+                if (content != null) {
+                    File file = new File(idfilePath);
+                    idFileMap.put(content, file.getParent());
+                }
             }
-            fileDirMap.remove(rootDir.getName());
+            DataManager.getInstance().UpdatePatientList();
         }
-
-        ReadFilesLoop(rootDir);
-        SortFileMap();
-        for (String idfilePath: idFilePaths)
-        {
-            String content = FileUtil.getFile(idfilePath);
-            if (content != null)
-            {
-                File file = new File(idfilePath);
-                idFileMap.put(content, file.getParent());
-            }
-        }
-        DataManager.getInstance().UpdatePatientList();
     }
 
     private void SortFileMap()
@@ -130,9 +144,9 @@ public class LocalFileModel {
 //        Log.d(TAG,"len =" + dirs.length);
         ArrayList<String> fileList = new ArrayList<String>();
         for (File childFile : dirs) {//遍历一级目录
-            if(childFile.isDirectory())
+            if (childFile.isDirectory())
             {
-                fileDirMap.put(childFile.getName(),ReadFilesLoop(childFile));
+                ReadFilesLoop(childFile);
             }
             else
             {
@@ -159,6 +173,8 @@ public class LocalFileModel {
                     }
                 }
             }
+
+
         }
         return fileList;
     }

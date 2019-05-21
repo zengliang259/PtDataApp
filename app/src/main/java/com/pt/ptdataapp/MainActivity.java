@@ -22,6 +22,7 @@ import com.github.mjdev.libaums.UsbMassStorageDevice;
 import com.pt.ptdataapp.Frame.FileExplorerView;
 import com.pt.ptdataapp.Frame.MainPage;
 import com.pt.ptdataapp.Model.DataManager;
+import com.pt.ptdataapp.Model.FileEntity;
 import com.pt.ptdataapp.Model.LocalFileModel;
 import com.pt.ptdataapp.fileUtil.FileUtil;
 import com.pt.ptdataapp.fileUtil.SDCardUtil;
@@ -36,6 +37,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements USBBroadCastReceiver.UsbListener{
@@ -70,6 +72,13 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     private int showDialogCount = 0;
     private Handler mHandler;
 
+    public boolean IsPtMounted = false;
+    public String PtMountPath = "";
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +156,36 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
 
         fileExploreFragment = new FileExplorerView();
         fileExploreFragment.SetContext(this);
+        fileExploreFragment.setOnFileClick(new FileExplorerView.OnFileClick() {
+            //3、实现接口对象的方法，
+            @Override
+            public void onClick(File clickFile) {
+                if (temp_position_index != VIEW_MAIN_PAGE_INDEX) {
+                    mTransaction = getSupportFragmentManager().beginTransaction();
+                    mTransaction.replace(R.id.id_fragment_content, mainPageFragment);
+                    mTransaction.commit();
+                    temp_position_index = VIEW_MAIN_PAGE_INDEX;
+                    File parentFile = clickFile.getParentFile();
+                    if (parentFile != null && parentFile.getParentFile() != null)
+                    {
+                        LocalFileModel.getInstance().AddLocalFiles(parentFile.getParent());
+                        List<Map.Entry<String, Long>> sortedFileList = LocalFileModel.getInstance().getSortedFileList();
+                        int findIndex = 0;
+                        for (int i = 0,len = sortedFileList.size(); i < len ; i ++)
+                        {
+                            if (sortedFileList.get(i).getKey().equals(clickFile.getAbsolutePath()))
+                            {
+                                findIndex = i;
+                                break;
+                            }
+                        }
+                        mainPageFragment.SafeScrollToIndex(findIndex);
+                    }
+
+                }
+                setButton(homePageBtn);
+            }
+        });
     }
 
     private void initBtns() {
@@ -175,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     mTransaction.replace(R.id.id_fragment_content, mainPageFragment);
                     mTransaction.commit();
                     temp_position_index = VIEW_MAIN_PAGE_INDEX;
-                    mainPageFragment.ScrollToTop();
+                    mainPageFragment.SafeScrollToIndex(0);
                 }
                 setButton(v);
             }
@@ -385,6 +424,8 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 {
                     if (file.getName().contains(PtDataFilePathPrefix))
                     {
+                        IsPtMounted = true;
+                        PtMountPath = mountUsbFolder;
                         rootMountFileList.add(file);
                         break;
                     }
@@ -457,17 +498,12 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
             {
                 // 本地文件目录命名规则
                 File localRootFile = new File(Environment.getExternalStorageDirectory(), LocalFileModel.DATA_PATH);
-                int childFileNum = 0;
                 if (!localRootFile.exists())
                 {
                     FileUtil.createDir(localRootFile.getAbsolutePath());
                 }
-                else
-                {
-                    childFileNum = localRootFile.listFiles().length;
-                }
 
-                String newFileName = (childFileNum + 1) + "";
+                String newFileName = IDStr;
                 destFilePath = Environment.getExternalStorageDirectory() + File.separator + LocalFileModel.DATA_PATH + File.separator + newFileName;
             }
 
@@ -476,16 +512,30 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 try
                 {
                     Log.d(TAG,"开始复制" + originalFile.getAbsolutePath());
-                    FileUtil.copyFolder(originalFile.getAbsolutePath(), destFilePath);
-                    LocalFileModel.getInstance().AddLocalFiles(destFilePath);
-                    if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
+                    List<FileEntity> sourceList = FileUtil.FindAllFile(originalFile.getAbsolutePath(), true);
+                   FileUtil.copyFolder(originalFile.getAbsolutePath(), destFilePath, this);
+                    Log.d(TAG,"复制完成" + originalFile.getAbsolutePath());
+                    List<FileEntity> dstList = FileUtil.FindAllFile(destFilePath, true);
+                    if (sourceList.size() == dstList.size())
                     {
-                        mainPageFragment.NotifyListDataRefresh();
-                        mainPageFragment.ScrollToTop();
+                        LocalFileModel.getInstance().AddLocalFiles(destFilePath);
+                        if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
+                        {
+                            mainPageFragment.NotifyListDataRefresh();
+                            mainPageFragment.SafeScrollToIndex(0);
+                        }
+                        else
+                        {
+                            mHandler.sendEmptyMessage(1);
+                        }
                     }
                     else
                     {
-                        mHandler.sendEmptyMessage(1);
+                        if (LocalFileModel.getInstance().idFileMap.get(IDStr) == null)
+                        {
+                            Log.d(TAG,"执行删除" + originalFile.getAbsolutePath());
+                            FileUtil.deleteDirectory(destFilePath);
+                        }
                     }
                 }
                 catch (Exception e)
@@ -507,12 +557,14 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
             Toast.makeText(Utils.getContext(), "内存空间不够，无法复制USB设备数据... ", Toast.LENGTH_SHORT).show();
             return;
         }
-        ShowDialog("复制USB数据中...");
+        ShowDialog("复制USB数据中，请勿拔出USB设备...");
         new Thread(){
             @Override
             public void run() {
-                super.run();
-                OpenMountFile();
+                if(IsPtMounted)
+                {
+                    OpenMountFile();
+                }
                 HideDialog();
             }
         }.start();
@@ -564,6 +616,39 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         {
             m_printUsbDevice = usbDevice;
         }
+        else if(IsTargetPtUSB(usbDevice))
+        {
+            rootMountFileList.clear();
+            // 列举Storage下面的文件夹
+            File storage = new File("/storage");
+            File[] files = storage.listFiles();
+            File usbRootFile = null;
+            for (final File file : files) {
+                if (IsPtUsbFolder(file)) {
+                    //满足该条件的文件夹就是u盘在手机上的目录,有且只能插入一个
+                    Log.d(TAG, "Usb File dir " + file.getName());
+                    File[] subFiles = file.listFiles();
+
+                    usbRootFile = file;
+                    break;
+                }
+            }
+            if (usbRootFile != null)
+            {
+                files = usbRootFile.listFiles();
+                for (File file : files)
+                {
+                    if (file.getName().contains(PtDataFilePathPrefix))
+                    {
+                        IsPtMounted = true;
+                        PtMountPath = usbRootFile.getAbsolutePath();
+                        rootMountFileList.add(file);
+                        break;
+                    }
+                }
+            }
+            AsyncCopyMountFile();
+        }
     }
 
     @Override
@@ -586,6 +671,12 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     @Override
     public void unMountUsbFolder(String unMountPath) {
         Log.d(TAG, unMountPath + " unMount");
-        rootMountFileList.clear();
+        if (unMountPath == PtMountPath)
+        {
+            rootMountFileList.clear();
+            IsPtMounted = false;
+            HideDialog();
+        }
+
     }
 }

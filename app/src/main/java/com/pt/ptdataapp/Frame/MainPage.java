@@ -78,6 +78,25 @@ public class MainPage extends Fragment {
             mRecyclerView.smoothScrollToPosition(0);
         }
     }
+    private int cacheScrollToIndex = -1;
+    public void SafeScrollToIndex(int index)
+    {
+        if (mAdapter == null)
+        {
+            cacheScrollToIndex = index;
+        }
+        else
+        {
+            ScrollToIndex(index);
+        }
+    }
+    public void ScrollToIndex(int index)
+    {
+        if (mAdapter != null && mAdapter.mAList.size() > index)
+        {
+            mRecyclerView.smoothScrollToPosition(index);
+        }
+    }
 
     private void initView() {
 
@@ -114,6 +133,12 @@ public class MainPage extends Fragment {
                 }
             }
         };
+
+        if (cacheScrollToIndex >= 0)
+        {
+            ScrollToIndex(cacheScrollToIndex);
+            cacheScrollToIndex = -1;
+        }
     }
 
     private void initListener(){
@@ -131,7 +156,7 @@ public class MainPage extends Fragment {
 
             @Override
             public void onPageSelected(int position,boolean isEnd) {
-//                Log.e(TAG,"选中位置:"+position+"  是否是滑动到底部:"+isEnd);
+                Log.e(TAG,"选中位置:"+position+"  是否是滑动到底部:"+isEnd);
                 curSelectIndex = position;
             }
 
