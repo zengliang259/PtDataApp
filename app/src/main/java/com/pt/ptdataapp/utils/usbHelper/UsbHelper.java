@@ -93,6 +93,7 @@ public class UsbHelper {
             //有就直接读取设备是否有权限
             if (!usbManager.hasPermission(device.getUsbDevice())) {
                 //没有权限请求权限
+                Log.d(TAG, "getDeviceList requestPermission");
                 usbManager.requestPermission(device.getUsbDevice(), pendingIntent);
             }
         }

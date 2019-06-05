@@ -41,8 +41,6 @@ public class FileUtil {
             outStream = new FileOutputStream(file);
             // 获取字符串对象的byte数组并写入文件流
             outStream.write(str.getBytes());
-            // 最后关闭文件输出流
-            outStream.close();
         } catch (Exception e) {
 //            e.printStackTrace();
             Log.e(TAG, "save file error");
@@ -336,6 +334,9 @@ public class FileUtil {
                             output.write(b, 0, len);
                         }
                         output.flush();
+
+                        input.close();
+                        output.close();
                     }
                     if(temp.isDirectory()){//如果是子文件夹
                         copyFolder(oldPath+"/"+file[i],newPath+"/"+file[i], context);

@@ -1,6 +1,7 @@
 package com.pt.ptdataapp.Frame;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pt.ptdataapp.Model.DataManager;
+import com.pt.ptdataapp.Model.FileEntity;
 import com.pt.ptdataapp.Model.PatientInfo;
 import com.pt.ptdataapp.R;
 import com.pt.ptdataapp.uiUtils.OnViewPagerListener;
@@ -196,7 +198,6 @@ public class MainPage extends Fragment {
         {
             mAList = list;
         }
-
 
         @Override
         public MainPage.MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
