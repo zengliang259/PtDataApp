@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     MainPage mainPageFragment;
     FileExplorerView fileExploreFragment;
     private View currentButton;
-    ImageButton filePageBtn;
+    ImageButton backBtn;
     ImageButton homePageBtn;
     ImageButton printPageBtn;
     public static final int VIEW_MAIN_PAGE_INDEX = 0;
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case 1:
-                        homePageBtn.performClick();
+                        OnShowMainPage();
                         break;
                     default:
                         break;
@@ -183,17 +183,23 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     }
 
                 }
-                setButton(homePageBtn);
             }
         });
     }
 
     private void initBtns() {
-        filePageBtn = (ImageButton) findViewById(R.id.file_page_btn);
+        backBtn = (ImageButton) findViewById(R.id.file_page_btn);
         homePageBtn = (ImageButton) findViewById(R.id.home_page_btn);
         printPageBtn = (ImageButton) findViewById(R.id.print_btn);
 
-        filePageBtn.setOnClickListener(new View.OnClickListener() {
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        homePageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (temp_position_index != VIEW_FILE_EXPLORE_INDEX) {
@@ -202,21 +208,6 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     mTransaction.commit();
                     temp_position_index = VIEW_FILE_EXPLORE_INDEX;
                 }
-                setButton(v);
-            }
-        });
-
-        homePageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (temp_position_index != VIEW_MAIN_PAGE_INDEX) {
-                    mTransaction = getSupportFragmentManager().beginTransaction();
-                    mTransaction.replace(R.id.id_fragment_content, mainPageFragment);
-                    mTransaction.commit();
-                    temp_position_index = VIEW_MAIN_PAGE_INDEX;
-                    mainPageFragment.SafeScrollToIndex(0);
-                }
-                setButton(v);
             }
         });
 
@@ -228,8 +219,19 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
             }
         });
 
-        filePageBtn.performClick();
+        homePageBtn.performClick();
 
+    }
+
+    private void OnShowMainPage()
+    {
+        if (temp_position_index != VIEW_MAIN_PAGE_INDEX) {
+            mTransaction = getSupportFragmentManager().beginTransaction();
+            mTransaction.replace(R.id.id_fragment_content, mainPageFragment);
+            mTransaction.commit();
+            temp_position_index = VIEW_MAIN_PAGE_INDEX;
+            mainPageFragment.SafeScrollToIndex(0);
+        }
     }
 
     private void OnPrintClick()
@@ -259,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 }
                 else
                 {
-                    Toast.makeText(Utils.getContext(), "正在获取Usb设备 " + m_printUsbDevice.getDeviceName() + " 权限中，请稍候再试...", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(Utils.getContext(), "正在获取Usb设备 " + m_printUsbDevice.getDeviceName() + " 权限中，请稍候再试...", Toast.LENGTH_SHORT).show();
                     UsbConnectionUtil.getInstance().requestPermission(m_printUsbDevice);
                 }
             }
@@ -272,11 +274,12 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
 
     private void setButton(View v) {
         if (currentButton != null && currentButton.getId() != v.getId()) {
-            currentButton.setEnabled(true);
+//            currentButton.setEnabled(true);
         }
-        v.setEnabled(false);
+//        v.setEnabled(false);
         currentButton = v;
     }
+
 
     // --------------------权限-------------
     void getPermission()
@@ -290,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         }
         else
         {
-            InitFromLocalFile();
+//            InitFromLocalFile();
         }
     }
 
@@ -317,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED))
             {
                 Log.d(TAG,"获取到权限了！");
-                InitFromLocalFile();
+//                InitFromLocalFile();
             } else { Log.d(TAG,"搞不定啊！");
             }
         }
@@ -598,6 +601,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         if (IsTargetPrintUSB(device_add))
         {
             m_printUsbDevice = device_add;
+            UsbConnectionUtil.getInstance().requestPermission(m_printUsbDevice);
         }
     }
 

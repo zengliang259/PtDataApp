@@ -13,7 +13,10 @@ public class FileDataReader
     {
         PatientID("Patient ID"),
         INR("INR"),
-        TestDate("Test Date");
+        TestDate("Test Date"),
+        ErrorCode("Error Code"),
+        TestID("Test ID"),
+        Pt("PT(s)");
 
         private String text;
 
@@ -83,10 +86,25 @@ public class FileDataReader
                 info.checkResult = splitStr[1];
 
             }
-            else if ((curMatchCode >> 1 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.TestDate.toString()) >= 0))
+            else if ((curMatchCode >> 2 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.TestDate.toString()) >= 0))
             {
                 curMatchCode = curMatchCode | 1 << 2;
                 info.checkDate = splitStr[1];
+            }
+            else if ((curMatchCode >> 3 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.Pt.toString()) >= 0))
+            {
+                curMatchCode = curMatchCode | 1 << 3;
+                info.Pt = splitStr[1];
+            }
+            else if ((curMatchCode >> 4 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.ErrorCode.toString()) >= 0))
+            {
+                curMatchCode = curMatchCode | 1 << 4;
+                info.errorCode = splitStr[1];
+            }
+            else if ((curMatchCode >> 5 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.TestID.toString()) >= 0))
+            {
+                curMatchCode = curMatchCode | 1 << 5;
+                info.testID = splitStr[1];
             }
         }
 

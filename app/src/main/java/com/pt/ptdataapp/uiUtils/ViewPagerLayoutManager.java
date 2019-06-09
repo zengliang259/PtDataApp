@@ -1,6 +1,7 @@
 package com.pt.ptdataapp.uiUtils;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
@@ -92,5 +93,15 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
 
     public void setOnViewPagerListener(OnViewPagerListener listener) {
         this.mOnViewPagerListener = listener;
+    }
+
+    public Parcelable onSaveInstanceState() {
+       return null;
+    }
+    public void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof LinearLayoutManager.SavedState) {
+            this.requestLayout();
+        }
+
     }
 }

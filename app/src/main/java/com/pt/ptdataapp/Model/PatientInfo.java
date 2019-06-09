@@ -8,5 +8,8 @@ public class PatientInfo {
     public String doctorName = "";
     public String checkDate = "";
     public String reportDate = "";
+    public String errorCode = "";
+    public String Pt = "";
+    public String testID = "";
 
 }

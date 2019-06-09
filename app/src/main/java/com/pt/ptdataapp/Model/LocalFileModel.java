@@ -95,6 +95,7 @@ public class LocalFileModel {
         if (curWorkFolder == null
                 || !curWorkFolder.getAbsolutePath().equals(rootDir.getAbsolutePath()))
         {
+            curWorkFolder = rootDir;
             // 先删除改目录之前的文件索引
             fileDirMap.put(rootDir.getName(), rootDir.lastModified());
             fileMap.clear();

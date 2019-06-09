@@ -96,7 +96,7 @@ public class MainPage extends Fragment {
     {
         if (mAdapter != null && mAdapter.mAList.size() > index)
         {
-            mRecyclerView.smoothScrollToPosition(index);
+            mRecyclerView.scrollToPosition(index);
         }
     }
 
@@ -222,7 +222,15 @@ public class MainPage extends Fragment {
 
                 inputType = (pInfo.checkResult.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_NUMBER;
                 holder.resultLabel.setInputType(inputType);
-                holder.resultLabel.setText(pInfo.checkResult);
+                if (inputType == InputType.TYPE_NULL)
+                {
+                    holder.resultLabel.setText(pInfo.errorCode);
+                }
+                else
+                {
+                    holder.resultLabel.setText(pInfo.checkResult);
+                }
+
 
                 inputType = (pInfo.doctorName.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
                 holder.doctorNameLabel.setInputType(inputType);

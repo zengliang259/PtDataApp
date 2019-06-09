@@ -9,7 +9,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -56,6 +58,8 @@ public class FileExplorerView extends Fragment {
     private boolean bInit = false;
 
     private ArrayList<FileEntity> mList;
+
+    private int menuSelectPosition = -1;
 
     private Handler mHandler;
     public FileExplorerView() {
@@ -105,7 +109,6 @@ public class FileExplorerView extends Fragment {
         Init();
         return rootView;
     }
-
     private void Init()
     {
         currentFile = new File(Environment.getExternalStorageDirectory(), LocalFileModel.DATA_PATH);
@@ -165,6 +168,68 @@ public class FileExplorerView extends Fragment {
         });
 
     }
+
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu,v,menuInfo);
+        menuSelectPosition = ((AdapterView.AdapterContextMenuInfo)menuInfo).position;
+        //设置Menu显示内容
+        menu.setHeaderTitle("文件操作");
+//        menu.setHeaderIcon(R.drawable.ic_launcher_foreground);
+        menu.add(1,1,1,"删除");
+        menu.add(1,2,1,"复制");
+    }
+
+    public boolean onContextItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case 1:
+                if (menuSelectPosition >= 0)
+                {
+                    final FileEntity entity = mList.get(menuSelectPosition);
+                    if (entity != null)
+                    {
+                        if (entity.getFileType() == FileEntity.Type.FILE)
+                        {
+                            FileUtil.deletefile(entity.getFilePath());
+                        }
+                        else
+                        {
+                            FileUtil.deleteDirectory(entity.getFilePath());
+                        }
+
+                        mList.remove(menuSelectPosition);
+                        menuSelectPosition = -1;
+                        mHandler.sendEmptyMessage(1);
+                    }
+                }
+
+                break;
+            case 2:
+                if (menuSelectPosition >= 0)
+                {
+                    final FileEntity entity = mList.get(menuSelectPosition);
+                    if (entity != null)
+                    {
+                        String usbPath = "";
+                        String destPath = LocalFileModel.DATA_PATH + File.separator + entity.getFileName();
+                        if (entity.getFileType() == FileEntity.Type.FILE)
+                        {
+                            FileUtil.deletefile(entity.getFilePath());
+                        }
+                        else
+                        {
+                            FileUtil.deleteDirectory(entity.getFilePath());
+                        }
+
+                        mList.remove(menuSelectPosition);
+                        menuSelectPosition = -1;
+                        mHandler.sendEmptyMessage(1);
+                    }
+                }
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
 
     private void ShowFileDetailInfo(String fileContent)
     {
@@ -259,6 +324,17 @@ public class FileExplorerView extends Fragment {
 
             }
         });
+
+//        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//
+//                return false;
+//            }
+//        });
+        registerForContextMenu(mListView);
     }
 
     class MyFileAdapter extends BaseAdapter {
