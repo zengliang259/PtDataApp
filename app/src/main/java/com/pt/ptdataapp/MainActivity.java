@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     if (parentFile != null && parentFile.getParentFile() != null)
                     {
                         LocalFileModel.getInstance().AddLocalFiles(parentFile.getParent());
+                        mainPageFragment.NotifyListDataRefresh();
                         List<Map.Entry<String, Long>> sortedFileList = LocalFileModel.getInstance().getSortedFileList();
                         int findIndex = 0;
                         for (int i = 0,len = sortedFileList.size(); i < len ; i ++)

@@ -181,11 +181,15 @@ public class MainPage extends Fragment {
             List<String> printList = new ArrayList<>();
             printList.add(viewHolder.titleLabel.getText().toString());
             printList.add(viewHolder.IDLabel.getText().toString());
+            printList.add(viewHolder.testIDLabel.getText().toString());
+            printList.add(viewHolder.ptLabel.getText().toString());
             printList.add(viewHolder.patientNameLabel.getText().toString());
             printList.add(viewHolder.resultLabel.getText().toString());
             printList.add(viewHolder.doctorNameLabel.getText().toString());
             printList.add(viewHolder.checkDateLabel.getText().toString());
+            printList.add(viewHolder.testTimeLabel.getText().toString());
             printList.add(viewHolder.reportDateLabel.getText().toString());
+
             DataManager.getInstance().SavePrintContentList(printList);
         }
 
@@ -211,6 +215,7 @@ public class MainPage extends Fragment {
         public void onBindViewHolder(MainPage.MyAdapter.ViewHolder holder, int position) {
             PatientInfo pInfo = mAList.get(position);
             if (pInfo != null) {
+                Log.d(TAG, pInfo.checkDate + " " + pInfo.checkResult + " " + pInfo.testID);
                 holder.titleLabel.setText(pInfo.title);
                 int inputType = (pInfo.ID.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_NUMBER;
                 holder.IDLabel.setInputType(inputType);
@@ -220,17 +225,19 @@ public class MainPage extends Fragment {
                 holder.patientNameLabel.setInputType(inputType);
                 holder.patientNameLabel.setText(pInfo.patientName);
 
-                inputType = (pInfo.checkResult.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_NUMBER;
-                holder.resultLabel.setInputType(inputType);
-                if (inputType == InputType.TYPE_NULL)
+                boolean isError = (pInfo.errorCode.replace(" ", "").length() > 0);
+                if (isError)
                 {
                     holder.resultLabel.setText(pInfo.errorCode);
+                    holder.ptLabel.setText(pInfo.errorCode);
                 }
                 else
                 {
                     holder.resultLabel.setText(pInfo.checkResult);
+                    holder.ptLabel.setText(pInfo.Pt);
                 }
-
+                holder.resultLabel.setInputType(InputType.TYPE_NULL);
+                holder.ptLabel.setInputType(InputType.TYPE_NULL);
 
                 inputType = (pInfo.doctorName.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
                 holder.doctorNameLabel.setInputType(inputType);
@@ -242,6 +249,12 @@ public class MainPage extends Fragment {
 
                 holder.reportDateLabel.setInputType(InputType.TYPE_NULL);
                 holder.reportDateLabel.setText(pInfo.reportDate);
+
+                holder.testIDLabel.setInputType(InputType.TYPE_NULL);
+                holder.testIDLabel.setText(pInfo.testID);
+
+                holder.testTimeLabel.setInputType(InputType.TYPE_NULL);
+                holder.testTimeLabel.setText(pInfo.testTime);
             }
         }
 
@@ -270,6 +283,9 @@ public class MainPage extends Fragment {
             EditText doctorNameLabel;
             EditText checkDateLabel;
             TextView reportDateLabel;
+            TextView testIDLabel;
+            TextView testTimeLabel;
+            TextView ptLabel;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -281,6 +297,9 @@ public class MainPage extends Fragment {
                 doctorNameLabel = itemView.findViewById(R.id.doctorNameLabel);
                 checkDateLabel = itemView.findViewById(R.id.checkDateLabel);
                 reportDateLabel = itemView.findViewById(R.id.reportDateLabel);
+                testTimeLabel = itemView.findViewById(R.id.testTimeLabel);
+                ptLabel = itemView.findViewById(R.id.ptLabel);
+                testIDLabel = itemView.findViewById(R.id.testIDLabel);
             }
         }
     }

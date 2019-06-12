@@ -16,7 +16,8 @@ public class FileDataReader
         TestDate("Test Date"),
         ErrorCode("Error Code"),
         TestID("Test ID"),
-        Pt("PT(s)");
+        Pt("PT(s)"),
+        TestTime("Test Time");
 
         private String text;
 
@@ -105,6 +106,11 @@ public class FileDataReader
             {
                 curMatchCode = curMatchCode | 1 << 5;
                 info.testID = splitStr[1];
+            }
+            else if ((curMatchCode >> 6 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.TestTime.toString()) >= 0))
+            {
+                curMatchCode = curMatchCode | 1 << 6;
+                info.testTime = splitStr[1];
             }
         }
 

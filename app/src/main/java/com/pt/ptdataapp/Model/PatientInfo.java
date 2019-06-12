@@ -11,5 +11,6 @@ public class PatientInfo {
     public String errorCode = "";
     public String Pt = "";
     public String testID = "";
+    public String testTime = "";
 
 }
