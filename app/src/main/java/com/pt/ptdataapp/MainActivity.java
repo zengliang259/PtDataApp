@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.github.mjdev.libaums.UsbMassStorageDevice;
 import com.pt.ptdataapp.Frame.FileExplorerView;
 import com.pt.ptdataapp.Frame.MainPage;
+import com.pt.ptdataapp.Frame.StationListPage;
 import com.pt.ptdataapp.Model.DataManager;
 import com.pt.ptdataapp.Model.FileEntity;
 import com.pt.ptdataapp.Model.LocalFileModel;
@@ -57,12 +58,14 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
      */
     MainPage mainPageFragment;
     FileExplorerView fileExploreFragment;
+    StationListPage stationListPage;
     private View currentButton;
     ImageButton backBtn;
     ImageButton homePageBtn;
     ImageButton printPageBtn;
     public static final int VIEW_MAIN_PAGE_INDEX = 0;
     public static final int VIEW_FILE_EXPLORE_INDEX = 1;
+    public static final int VIEW_STATION_LIST_INDEX = 2;
     private int temp_position_index = -1;
     private UsbHelper usbHelper;
     private ArrayList<File> rootMountFileList;
@@ -186,6 +189,22 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 }
             }
         });
+
+        stationListPage = new StationListPage();
+        stationListPage.SetContext(this);
+        stationListPage.setOnFileClick(new StationListPage.OnFileClick() {
+            @Override
+            public void onClick(String clickFilePath) {
+                if (temp_position_index != VIEW_FILE_EXPLORE_INDEX) {
+                    mTransaction = getSupportFragmentManager().beginTransaction();
+                    mTransaction.replace(R.id.id_fragment_content, fileExploreFragment);
+                    mTransaction.commit();
+                    temp_position_index = VIEW_FILE_EXPLORE_INDEX;
+                    fileExploreFragment.Refresh(clickFilePath);
+
+                }
+            }
+        });
     }
 
     private void initBtns() {
@@ -203,11 +222,11 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         homePageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (temp_position_index != VIEW_FILE_EXPLORE_INDEX) {
+                if (temp_position_index != VIEW_STATION_LIST_INDEX) {
                     mTransaction = getSupportFragmentManager().beginTransaction();
-                    mTransaction.replace(R.id.id_fragment_content, fileExploreFragment);
+                    mTransaction.replace(R.id.id_fragment_content, stationListPage);
                     mTransaction.commit();
-                    temp_position_index = VIEW_FILE_EXPLORE_INDEX;
+                    temp_position_index = VIEW_STATION_LIST_INDEX;
                 }
             }
         });

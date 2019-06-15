@@ -106,13 +106,11 @@ public class FileExplorerView extends Fragment {
         if (parent != null) {
             parent.removeView(rootView);
         }
-        Init();
         return rootView;
     }
-    private void Init()
+    public void Refresh(String filePath)
     {
-        currentFile = new File(Environment.getExternalStorageDirectory(), LocalFileModel.DATA_PATH);
-        rootFilePath = currentFile.getAbsolutePath();
+        rootFilePath = filePath;
         System.out.println(rootFilePath);
         if (!bInit)
         {
