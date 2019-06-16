@@ -85,7 +85,7 @@ public class LocalFileModel {
 
     }
 
-    public void AddLocalFiles(String dirPath)
+    public void AddLocalFiles(String dirPath,boolean forceRefresh)
     {
         File rootDir = new File(dirPath);
         if (!rootDir.exists()) {//判断路径是否存在
@@ -93,7 +93,7 @@ public class LocalFileModel {
         }
         Log.d(TAG,"AddLocalFiles " + rootDir.getAbsolutePath());
         if (curWorkFolder == null
-                || !curWorkFolder.getAbsolutePath().equals(rootDir.getAbsolutePath()))
+                || !curWorkFolder.getAbsolutePath().equals(rootDir.getAbsolutePath()) || forceRefresh)
         {
             curWorkFolder = rootDir;
             // 先删除改目录之前的文件索引
@@ -155,7 +155,6 @@ public class LocalFileModel {
                     String _name = childFile.getName();
                     String filePath = childFile.getAbsolutePath();//获取文件路径
                     String fileName = childFile.getName().substring(0, _name.length() - 4);//获取文件名
-                    long lastModifyTime = childFile.lastModified();
 //                    Log.d(TAG, "fileName:" + fileName);
 //                    Log.d(TAG, "filePath:" + filePath);
 //                    Log.d(TAG, "last modify time:" + lastModifyTime);
@@ -167,7 +166,8 @@ public class LocalFileModel {
                         }
                         else
                         {
-                            fileMap.put(filePath,lastModifyTime);
+                            long fileNumber = Integer.parseInt(fileName, 10);
+                            fileMap.put(filePath,fileNumber);
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "读取" + fileName +"文件失败");

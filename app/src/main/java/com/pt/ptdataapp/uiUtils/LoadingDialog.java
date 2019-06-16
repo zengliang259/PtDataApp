@@ -24,8 +24,6 @@ public class LoadingDialog {
         inflater = LayoutInflater.from(context);
         init();
     }
-
-
     private void init() {
         view = inflater.inflate(R.layout.dialog_loading, null);
         LinearLayout layout = view

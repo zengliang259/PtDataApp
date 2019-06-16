@@ -32,11 +32,14 @@ public class TSCUtils {
     public static String UnderLine_End = "200D0A";
     public static String Indentation = "1B24"; // 1B 24 29 00 缩进29h
 
-    public static String IDStr = "ID:";
+    public static String IDStr = "病人ID:";
     public static String NameStr = "姓名:";
+    public static String TestIDStr = "检测序号:";
+    public static String PtStr = "Pt:";
     public static String INRStr = "INR:";
     public static String DoctorNameStr = "报告医生:";
     public static String CheckDateStr = "检测日期:";
+    public static String TestTimeStr = "检测时间:";
     public static String ReportDateStr = "报告日期:";
 
     /**
@@ -84,6 +87,24 @@ public class TSCUtils {
         cmdStr += Indent(41, 0);
         content = printContentList.get(2);
         cmdStr += GetSingleTextCmdStr(NameStr, content, 1);
+
+        // 检测序号
+        cmdStr += UnderLine_Start1;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += UnderLine_Start2;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += Indent(41, 0);
+        content = printContentList.get(3);
+        cmdStr += GetSingleTextCmdStr(TestIDStr, content, 1);
+
+        // pt值
+        cmdStr += UnderLine_Start1;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += UnderLine_Start2;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += Indent(41, 0);
+        content = printContentList.get(4);
+        cmdStr += GetSingleTextCmdStr(PtStr, content, 1);
         cmdStr += EnterPaperLine(1);
 
         // INR
@@ -95,7 +116,7 @@ public class TSCUtils {
         cmdStr += StringUtil.ByteToHexString((byte) 0); // 取消下划线
         cmdStr += Bold;
         cmdStr += Indent(41, 0);
-        content = printContentList.get(3);
+        content = printContentList.get(5);
         cmdStr += GetSingleTextCmdStr(INRStr, content, 0);
         cmdStr += EnterPaperLine(1);
 
@@ -111,7 +132,7 @@ public class TSCUtils {
 
         // 报告医生
         cmdStr += Indent(41,0);
-        content = printContentList.get(4);
+        content = printContentList.get(6);
         cmdStr += GetSingleTextCmdStr(DoctorNameStr,content,1);
         cmdStr += UnderLine_Start1;
         cmdStr += StringUtil.ByteToHexString((byte) 0);
@@ -121,16 +142,26 @@ public class TSCUtils {
         // 检测日期
 
         cmdStr += Indent(41,0);
-        content = printContentList.get(5);
+        content = printContentList.get(7);
         cmdStr += GetSingleTextCmdStr(CheckDateStr,content,2);
         cmdStr += UnderLine_Start1;
         cmdStr += StringUtil.ByteToHexString((byte) 0);
         cmdStr += UnderLine_Start2;
         cmdStr += StringUtil.ByteToHexString((byte) 0);
-        // 报告日期
+
+        // 检测时间
 
         cmdStr += Indent(41,0);
-        content = printContentList.get(6);
+        content = printContentList.get(8);
+        cmdStr += GetSingleTextCmdStr(TestTimeStr,content,2);
+        cmdStr += UnderLine_Start1;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += UnderLine_Start2;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+
+        // 报告日期
+        cmdStr += Indent(41,0);
+        content = printContentList.get(9);
         cmdStr += GetSingleTextCmdStr(ReportDateStr,content,2);
         // 切纸
         cmdStr += Cut_Paper;

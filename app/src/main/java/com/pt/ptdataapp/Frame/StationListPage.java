@@ -43,7 +43,7 @@ public class StationListPage extends Fragment {
     }
     //1、定义接口
     public interface OnFileClick {
-        public void onClick(String clickFilePath);
+        public void onClick(String clickFilePath, int position);
     }
     private OnFileClick onFileClick;//2、定义接口成员变量
     //定义接口变量的get方法
@@ -145,12 +145,13 @@ public class StationListPage extends Fragment {
                             mAdapter = new StationListPage.MyAdapter(mList);
                             mRecyclerView.setAdapter(mAdapter);
                         }else{
+                            mAdapter.RefreshList(mList);
                             mAdapter.notifyDataSetChanged();
                         }
                         break;
                     case 2:
                         if(onFileClick !=null){
-                            onFileClick.onClick((String)msg.obj);
+                            onFileClick.onClick((String)msg.obj, msg.arg1);
                         }
                     default:
                         break;
@@ -216,6 +217,10 @@ public class StationListPage extends Fragment {
         {
             mAList = list;
         }
+        public void RefreshList(List<FileEntity> list)
+        {
+            mAList = list;
+        }
 
         @Override
         public StationListPage.MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -254,26 +259,26 @@ public class StationListPage extends Fragment {
             return null;
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public class ViewHolder extends RecyclerView.ViewHolder {
             TextView stationName;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 stationName = itemView.findViewById(R.id.stationNameLabel);
-            }
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        int pos = getAdapterPosition();
+                        final FileEntity entity = mAList.get(pos);
+                        if (entity != null) {
+                            Message msg = new Message();
+                            msg.what = 2;
+                            msg.obj = entity.getFilePath();
+                            msg.arg1 = pos;
+                            mHandler.sendMessage(msg);
+                        }
 
-            @Override
-            public void onClick(View v) {
-                    int pos = getAdapterPosition();
-                    final FileEntity entity = mList.get(pos);
-                    if (entity != null)
-                    {
-                        Message msg = new Message();
-                        msg.what = 2;
-                        msg.obj = entity.getFilePath();
-                        mHandler.sendMessage(msg);
                     }
-
+                });
             }
         }
     }

@@ -304,7 +304,7 @@ public class FileUtil {
      * @return boolean
      */
     public static void copyFolder(String oldPath, String newPath, MainActivity context) {
-        if (!context.IsPtMounted)
+        if (context != null && !context.IsPtMounted)
         {
             return ;
         }

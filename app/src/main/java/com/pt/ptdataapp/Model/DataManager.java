@@ -8,6 +8,7 @@ import com.pt.ptdataapp.fileUtil.FileDataReader;
 import com.pt.ptdataapp.fileUtil.FileUtil;
 import com.pt.ptdataapp.utils.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -95,4 +96,22 @@ public class DataManager {
         fileDetailContentListCache = contentList;
     }
     public List<String> getFileDetailContentListCache(){return fileDetailContentListCache;}
+
+    private File copyTargetUsbDirFile;
+    public void SetCopyTargetUsbDirFile(File usbDirFile)
+    {
+        copyTargetUsbDirFile = usbDirFile;
+    }
+
+    public void RemoveCopyTargetUsbDirFile()
+    {
+        copyTargetUsbDirFile = null;
+    }
+
+    public File GetCopyUsbPath()
+    {
+        return copyTargetUsbDirFile;
+    }
+
+    public String CurReadChildPathBeforeMainPage;
 }

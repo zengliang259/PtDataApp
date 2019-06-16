@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.pt.ptdataapp.MainActivity;
 import com.pt.ptdataapp.Model.DataManager;
 import com.pt.ptdataapp.Model.FileEntity;
 import com.pt.ptdataapp.Model.PatientInfo;
@@ -24,6 +25,7 @@ import com.pt.ptdataapp.R;
 import com.pt.ptdataapp.uiUtils.OnViewPagerListener;
 import com.pt.ptdataapp.uiUtils.ViewPagerLayoutManager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class MainPage extends Fragment {
     private MainPage.MyAdapter mAdapter;
     private ViewPagerLayoutManager mLayoutManager;
     private int curSelectIndex = 0;
-    private Context activityContext;
+    private MainActivity activityContext;
     private Handler mHandler;
 
     public MainPage()
@@ -58,7 +60,7 @@ public class MainPage extends Fragment {
         return rootView;
     }
 
-    public void SetContext(Context context)
+    public void SetContext(MainActivity context)
     {
         activityContext = context;
 
@@ -71,6 +73,18 @@ public class MainPage extends Fragment {
             mHandler.sendEmptyMessage(1);
         }
 
+    }
+
+    public void onBackPressed() {
+
+        if (activityContext != null)
+        {
+            if (DataManager.getInstance().CurReadChildPathBeforeMainPage != null)
+            {
+                File childFile = new File(DataManager.getInstance().CurReadChildPathBeforeMainPage);
+                activityContext.OnShowFileExplorePage(childFile.getParent(), childFile);
+            }
+        }
     }
 
     public void ScrollToTop()
@@ -181,9 +195,9 @@ public class MainPage extends Fragment {
             List<String> printList = new ArrayList<>();
             printList.add(viewHolder.titleLabel.getText().toString());
             printList.add(viewHolder.IDLabel.getText().toString());
+            printList.add(viewHolder.patientNameLabel.getText().toString());
             printList.add(viewHolder.testIDLabel.getText().toString());
             printList.add(viewHolder.ptLabel.getText().toString());
-            printList.add(viewHolder.patientNameLabel.getText().toString());
             printList.add(viewHolder.resultLabel.getText().toString());
             printList.add(viewHolder.doctorNameLabel.getText().toString());
             printList.add(viewHolder.checkDateLabel.getText().toString());

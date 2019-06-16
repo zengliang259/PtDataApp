@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pt.ptdataapp.MainActivity;
 import com.pt.ptdataapp.Model.DataManager;
 import com.pt.ptdataapp.Model.FileEntity;
 import com.pt.ptdataapp.Model.LocalFileModel;
@@ -41,7 +42,6 @@ import java.util.List;
 public class FileExplorerView extends Fragment {
     private View rootView;
     private ListView mListView;
-    private RelativeLayout mFileContentView;
 
     TextView IDLabel;
     TextView titleLabel;
@@ -52,9 +52,10 @@ public class FileExplorerView extends Fragment {
     TextView reportDateLabel;
 
     private MyFileAdapter mAdapter;
-    private Context mContext;
+    private MainActivity mContext;
     private File currentFile;
     private String rootFilePath;
+    private int parentPosition = 0;
     private boolean bInit = false;
 
     private ArrayList<FileEntity> mList;
@@ -82,7 +83,7 @@ public class FileExplorerView extends Fragment {
 
 
 
-    public void SetContext(Context context)
+    public void SetContext(MainActivity context)
     {
         mContext = context;
     }
@@ -93,66 +94,76 @@ public class FileExplorerView extends Fragment {
         if (rootView == null)
         {
             rootView = inflater.inflate(R.layout.fragment_file_explorer_view, container, false);
-            IDLabel = rootView.findViewById(R.id.printIDLabel);
-            titleLabel = rootView.findViewById(R.id.printTitleLabel);
-            patientNameLabel = rootView.findViewById(R.id.printPatientNameLabel);
-            resultLabel = rootView.findViewById(R.id.printResultLabel);
-            doctorNameLabel = rootView.findViewById(R.id.printDoctorNameLabel);
-            checkDateLabel = rootView.findViewById(R.id.printCheckDateLabel);
-            reportDateLabel = rootView.findViewById(R.id.printReportDateLabel);
         }
 
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
             parent.removeView(rootView);
         }
+        UpdateUI();
         return rootView;
     }
-    public void Refresh(String filePath)
+    public void Refresh(String filePath, File curFile, int position)
     {
         rootFilePath = filePath;
-        System.out.println(rootFilePath);
-        if (!bInit)
+        currentFile = curFile;
+        if (position >= 0)
         {
-            bInit = true;
-            mList = new ArrayList<>();
-            initView();
-            mHandler = new Handler(){
-                @Override
-                public void handleMessage(Message msg) {
-                    super.handleMessage(msg);
-                    switch (msg.what) {
-                        case 1:
-                            mListView.setVisibility(View.VISIBLE);
-                            mFileContentView.setVisibility(View.INVISIBLE);
-                            if(mAdapter ==null){
-                                mAdapter = new MyFileAdapter(mContext, mList);
-                                mListView.setAdapter(mAdapter);
-                            }else{
-                                mAdapter.notifyDataSetChanged();
-                            }
-
-                            break;
-                        case 2:
-//                            mListView.setVisibility(View.INVISIBLE);
-//                            mFileContentView.setVisibility(View.VISIBLE);
-//                            if (msg.obj != null)
-//                            {
-//                                ShowFileDetailInfo((String)msg.obj);
-//                            }
-                            if(onFileClick !=null){
-                                onFileClick.onClick((File)msg.obj);
-                            }
-
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            };
+            parentPosition = position;
         }
-        getData(rootFilePath);
+        System.out.println(rootFilePath);
+    }
+
+    private void UpdateUI()
+    {
+        if (rootView != null)
+        {
+            if (!bInit)
+            {
+                bInit = true;
+                mList = new ArrayList<>();
+                initView();
+                mHandler = new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        switch (msg.what) {
+                            case 1:
+                                mListView.setVisibility(View.VISIBLE);
+                                if(mAdapter ==null){
+                                    mAdapter = new MyFileAdapter(mContext, mList);
+                                    mListView.setAdapter(mAdapter);
+                                }else{
+                                    mAdapter.notifyDataSetChanged();
+                                }
+
+                                break;
+                            case 2:
+                                if(onFileClick !=null){
+                                    onFileClick.onClick((File)msg.obj);
+                                }
+
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                };
+            }
+            if (currentFile != null)
+            {
+                getData(currentFile.getPath());
+            }
+            else
+            {
+                if (rootFilePath != null)
+                {
+                    getData(rootFilePath);
+                }
+            }
+
+        }
     }
 
     private void getData(final String path) {
@@ -174,7 +185,12 @@ public class FileExplorerView extends Fragment {
         menu.setHeaderTitle("文件操作");
 //        menu.setHeaderIcon(R.drawable.ic_launcher_foreground);
         menu.add(1,1,1,"删除");
-        menu.add(1,2,1,"复制");
+        File curCopyTargetUsbFile = DataManager.getInstance().GetCopyUsbPath();
+        if (curCopyTargetUsbFile != null)
+        {
+            menu.add(1,2,1,"复制至" + curCopyTargetUsbFile.getName());
+        }
+
     }
 
     public boolean onContextItemSelected(MenuItem item){
@@ -204,23 +220,29 @@ public class FileExplorerView extends Fragment {
             case 2:
                 if (menuSelectPosition >= 0)
                 {
+                    File curCopyTargetUsbFile = DataManager.getInstance().GetCopyUsbPath();
+                    if (curCopyTargetUsbFile == null || !curCopyTargetUsbFile.exists())
+                    {
+                        Toast.makeText(Utils.getContext(),"复制目标目录不存在", Toast.LENGTH_SHORT).show();
+                        return super.onContextItemSelected(item);
+                    }
+
                     final FileEntity entity = mList.get(menuSelectPosition);
                     if (entity != null)
                     {
-                        String usbPath = "";
-                        String destPath = LocalFileModel.DATA_PATH + File.separator + entity.getFileName();
-                        if (entity.getFileType() == FileEntity.Type.FILE)
-                        {
-                            FileUtil.deletefile(entity.getFilePath());
+                        String sourcePath = entity.getFilePath();
+                        String targetPath = curCopyTargetUsbFile.getAbsolutePath() + File.separator + entity.getFileName();
+                        mContext.ShowDialog("正在复制文件,请勿拔出USB设备");
+                        if (entity.getFileType() == FileEntity.Type.FLODER) {
+
+                            FileUtil.copyFolder(sourcePath, targetPath, null);
                         }
                         else
                         {
-                            FileUtil.deleteDirectory(entity.getFilePath());
+                            FileUtil.copyFile(sourcePath, targetPath);
                         }
-
-                        mList.remove(menuSelectPosition);
+                        mContext.HideDialog();
                         menuSelectPosition = -1;
-                        mHandler.sendEmptyMessage(1);
                     }
                 }
                 break;
@@ -245,50 +267,24 @@ public class FileExplorerView extends Fragment {
         doctorNameLabel.setText(pInfo.doctorName);
     }
 
-    public void SaveEditData()
-    {
-        List<String> printList = new ArrayList<>();
-        if (mFileContentView.getVisibility() == View.VISIBLE)
-        {
-            printList.add(titleLabel.getText().toString());
-            printList.add(IDLabel.getText().toString());
-            printList.add(patientNameLabel.getText().toString());
-            printList.add(resultLabel.getText().toString());
-            printList.add(doctorNameLabel.getText().toString());
-            printList.add(checkDateLabel.getText().toString());
-            printList.add(reportDateLabel.getText().toString());
-        }
-        else
-        {
-            Toast.makeText(Utils.getContext(), "请选择要打印的文件...", Toast.LENGTH_SHORT).show();
-        }
-        DataManager.getInstance().SavePrintContentList(printList);
-    }
 
     public void onBackPressed() {
-        if (mFileContentView.getVisibility() == View.VISIBLE)
-        {
-            mListView.setVisibility(View.VISIBLE);
-            mFileContentView.setVisibility(View.INVISIBLE);
-//            mHandler.sendEmptyMessage(1);
-        }
-        else
-        {
-            if(rootFilePath.equals(currentFile.getAbsolutePath())){
-                System.out.println("已经到了根目录...");
-                return ;
+        if(rootFilePath.equals(currentFile.getAbsolutePath())){
+            System.out.println("已经到了根目录...");
+            if (mContext != null)
+            {
+                mContext.OnShowStationListPage(parentPosition);
             }
-
-            String parentPath = currentFile.getParent();
-            currentFile = new File(parentPath);
-            getData(parentPath);
+            return ;
         }
 
+        String parentPath = currentFile.getParent();
+        currentFile = new File(parentPath);
+        getData(parentPath);
     }
 
     private void initView() {
         mListView =  rootView.findViewById(R.id.file_list_view);
-        mFileContentView = rootView.findViewById(R.id.file_content_root);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -418,7 +414,7 @@ public class FileExplorerView extends Fragment {
                     break;
                 case 1:
                     holder.iv.setImageResource(R.drawable.file_img);
-                    holder.tv.setText(entity.getFileName());
+                    holder.tv.setText(entity.getFileName().replace(".txt", ""));
 
                     break;
 

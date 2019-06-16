@@ -60,17 +60,59 @@
 
     <View
         android:id="@+id/black_line2"
-        android:layout_width="340dp"
+        android:layout_width="295dp"
         android:layout_height="2dp"
         android:layout_below="@+id/IDLabel"
         android:layout_marginLeft="220dp"
         android:layout_marginTop="-10dp"
         android:background="#000000"></View>
+
+    <TextView
+        android:id="@+id/patientNameLabel_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/IDLabel"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="5dp"
+        android:fontFamily="serif"
+        android:lineSpacingExtra="8sp"
+        android:text="姓名："
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="40sp" />
+
+    <EditText
+        android:id="@+id/patientNameLabel"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/IDLabel"
+        android:layout_alignLeft="@+id/patientNameLabel_title"
+        android:layout_marginLeft="115dp"
+        android:layout_marginTop="12dp"
+        android:background="@null"
+        android:fontFamily="serif"
+        android:lineSpacingExtra="8sp"
+        android:saveEnabled="false"
+        android:text="李小强"
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="40sp" />
+
+    <View
+        android:id="@+id/black_line3"
+        android:layout_width="345dp"
+        android:layout_height="2dp"
+        android:layout_below="@+id/patientNameLabel"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="-10dp"
+        android:background="#000000"></View>
+
     <TextView
         android:id="@+id/testIDLabel_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/IDLabel"
+        android:layout_below="@+id/patientNameLabel"
         android:layout_marginStart="60dp"
         android:layout_marginTop="12dp"
         android:fontFamily="serif"
@@ -84,9 +126,9 @@
         android:id="@+id/testIDLabel"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/IDLabel"
+        android:layout_below="@+id/patientNameLabel"
         android:layout_alignLeft="@+id/testIDLabel_title"
-        android:layout_marginLeft="203dp"
+        android:layout_marginLeft="195dp"
         android:layout_marginTop="12dp"
         android:background="@null"
         android:fontFamily="serif"
@@ -99,11 +141,11 @@
         android:textSize="40sp" />
 
     <View
-        android:id="@+id/black_line3"
-        android:layout_width="300dp"
+        android:id="@+id/black_line4"
+        android:layout_width="265dp"
         android:layout_height="2dp"
         android:layout_below="@+id/testIDLabel"
-        android:layout_marginLeft="257dp"
+        android:layout_marginLeft="248dp"
         android:layout_marginTop="-10dp"
         android:background="#000000"></View>
 
@@ -127,7 +169,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/testIDLabel"
         android:layout_alignLeft="@+id/ptLabel_title"
-        android:layout_marginLeft="65dp"
+        android:layout_marginLeft="72dp"
         android:layout_marginTop="12dp"
         android:background="@null"
         android:fontFamily="serif"
@@ -140,60 +182,20 @@
         android:textSize="40sp" />
 
     <View
-        android:id="@+id/black_line4"
-        android:layout_width="345dp"
+        android:id="@+id/black_line5"
+        android:layout_width="388dp"
         android:layout_height="2dp"
         android:layout_below="@+id/ptLabel"
         android:layout_marginLeft="125dp"
         android:layout_marginTop="-10dp"
         android:background="#000000"></View>
 
-    <TextView
-        android:id="@+id/patientNameLabel_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ptLabel"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="5dp"
-        android:fontFamily="serif"
-        android:lineSpacingExtra="8sp"
-        android:text="姓名："
-        android:textAlignment="viewStart"
-        android:textColor="@color/colorAccent"
-        android:textSize="40sp" />
-
-    <EditText
-        android:id="@+id/patientNameLabel"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ptLabel"
-        android:layout_alignLeft="@+id/patientNameLabel_title"
-        android:layout_marginLeft="115dp"
-        android:layout_marginTop="12dp"
-        android:background="@null"
-        android:fontFamily="serif"
-        android:lineSpacingExtra="8sp"
-        android:saveEnabled="false"
-        android:text="李小强"
-        android:textAlignment="viewStart"
-        android:textColor="@color/colorAccent"
-        android:textSize="40sp" />
-
-    <View
-        android:id="@+id/black_line5"
-        android:layout_width="300dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/patientNameLabel"
-        android:layout_marginLeft="170dp"
-        android:layout_marginTop="-10dp"
-        android:background="#000000"></View>
 
     <TextView
         android:id="@+id/resultLabel_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/patientNameLabel"
+        android:layout_below="@+id/ptLabel"
         android:layout_marginStart="60dp"
         android:layout_marginTop="30dp"
         android:fontFamily="sans-serif-smallcaps"
@@ -207,7 +209,7 @@
         android:id="@+id/resultLabel"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/patientNameLabel"
+        android:layout_below="@+id/ptLabel"
         android:layout_alignLeft="@+id/resultLabel_title"
         android:layout_marginLeft="200dp"
         android:layout_marginTop="30dp"
