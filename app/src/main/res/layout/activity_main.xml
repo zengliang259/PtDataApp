@@ -10,9 +10,8 @@
     <FrameLayout
         android:id="@+id/id_fragment_content"
         android:layout_width="match_parent"
-        android:layout_height="880dp"
+        android:layout_height="match_parent"
         android:layout_above="@+id/buttom_bar_group"
-        android:layout_marginBottom="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp"></FrameLayout>
 

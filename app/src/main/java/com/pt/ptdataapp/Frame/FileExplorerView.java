@@ -34,6 +34,8 @@ import com.pt.ptdataapp.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -172,6 +174,24 @@ public class FileExplorerView extends Fragment {
             public void run() {
                 mList.clear();
                 mList.addAll(FileUtil.FindAllFile(path, false));
+                Collections.sort(mList, new Comparator<FileEntity>() {
+                    @Override
+                    public int compare(FileEntity o1, FileEntity o2) {
+                        String fileName1 = o1.getFileName().replace(".txt", "");
+                        String fileName2 = o2.getFileName().replace(".txt", "");
+                        if (fileName1.equals("id"))
+                        {
+                            fileName1 = "0";
+                        }
+                        if (fileName2.equals("id"))
+                        {
+                            fileName2 = "0";
+                        }
+                        int num1 = Integer.parseInt(fileName1, 10);
+                        int num2 = Integer.parseInt(fileName2, 10);
+                        return -num1 + num2;
+                    }
+                });
                 mHandler.sendEmptyMessage(1);
             }
         });

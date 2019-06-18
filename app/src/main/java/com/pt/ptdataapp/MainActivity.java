@@ -694,7 +694,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
             Toast.makeText(Utils.getContext(), "内存空间不够，无法复制USB设备数据... ", Toast.LENGTH_SHORT).show();
             return;
         }
-        Toast.makeText(Utils.getContext(), "已开始为您同步USB数据，请勿拔出USB设备... ", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(Utils.getContext(), "已开始为您同步USB数据，请勿拔出USB设备... ", Toast.LENGTH_SHORT).show();
         ShowDialog("复制USB数据中，请勿拔出USB设备...");
         new Thread(){
             @Override
@@ -727,7 +727,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
 
     @Override
     public void insertUsb(UsbDevice device_add) {
-        Toast.makeText(Utils.getContext(), "检测到USB设备插入... ", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(Utils.getContext(), "检测到USB设备插入... ", Toast.LENGTH_SHORT).show();
         if (IsTargetPrintUSB(device_add))
         {
             m_printUsbDevice = device_add;
@@ -738,7 +738,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     @Override
     public void removeUsb(UsbDevice device_remove) {
         if (IsTargetPrintUSB(device_remove)) {
-            Toast.makeText(Utils.getContext(), "检测到USB设备拔出... ", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(Utils.getContext(), "检测到USB设备拔出... ", Toast.LENGTH_SHORT).show();
             Log.d(TAG, device_remove.getDeviceName()+" remove");
             if (UsbConnectionUtil.getInstance() != null)
             {
@@ -751,7 +751,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
     @Override
     public void getReadUsbPermission(UsbDevice usbDevice) {
         Log.d(TAG, "getReadUsbPermission");
-        Toast.makeText(Utils.getContext(), "获取USB设备权限成功 ", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(Utils.getContext(), "获取USB设备权限成功 ", Toast.LENGTH_SHORT).show();
         if (IsTargetPrintUSB(usbDevice))
         {
             m_printUsbDevice = usbDevice;

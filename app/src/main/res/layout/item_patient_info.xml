@@ -12,9 +12,9 @@
         android:id="@+id/titleLabel"
         android:layout_width="match_parent"
         android:layout_height="135dp"
-        android:fontFamily="sans-serif-smallcaps"
+        android:fontFamily="@font/amaranth"
         android:lineSpacingExtra="8sp"
-        android:text="岭南医院\nINR检测报告单"
+        android:text="Hemo POC\n检测报告单"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
@@ -150,54 +150,12 @@
         android:background="#000000"></View>
 
     <TextView
-        android:id="@+id/ptLabel_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/testIDLabel"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
-        android:fontFamily="serif"
-        android:lineSpacingExtra="8sp"
-        android:text="Pt："
-        android:textAlignment="center"
-        android:textColor="@color/colorAccent"
-        android:textSize="40sp" />
-
-    <EditText
-        android:id="@+id/ptLabel"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/testIDLabel"
-        android:layout_alignLeft="@+id/ptLabel_title"
-        android:layout_marginLeft="72dp"
-        android:layout_marginTop="12dp"
-        android:background="@null"
-        android:fontFamily="serif"
-        android:inputType="number"
-        android:lineSpacingExtra="8sp"
-        android:saveEnabled="false"
-        android:text="1.0"
-        android:textAlignment="textStart"
-        android:textColor="@color/colorAccent"
-        android:textSize="40sp" />
-
-    <View
-        android:id="@+id/black_line5"
-        android:layout_width="388dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/ptLabel"
-        android:layout_marginLeft="125dp"
-        android:layout_marginTop="-10dp"
-        android:background="#000000"></View>
-
-
-    <TextView
         android:id="@+id/resultLabel_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ptLabel"
+        android:layout_below="@+id/testIDLabel"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="sans-serif-smallcaps"
         android:lineSpacingExtra="8sp"
         android:text="INR："
@@ -209,10 +167,10 @@
         android:id="@+id/resultLabel"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ptLabel"
+        android:layout_below="@+id/testIDLabel"
         android:layout_alignLeft="@+id/resultLabel_title"
         android:layout_marginLeft="200dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="12dp"
         android:background="@null"
         android:fontFamily="sans-serif-smallcaps"
         android:inputType="number"
@@ -224,51 +182,45 @@
         android:textSize="80sp" />
 
     <TextView
-        android:id="@+id/doctorNameLabel_title"
+        android:id="@+id/ptLabel_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/resultLabel"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="5dp"
-        android:fontFamily="serif"
+        android:layout_marginTop="-10dp"
+        android:fontFamily="sans-serif-smallcaps"
         android:lineSpacingExtra="8sp"
-        android:text="报告医生："
-        android:textAlignment="textStart"
+        android:text="Pt："
+        android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:textSize="40sp" />
+        android:textSize="80sp" />
 
     <EditText
-        android:id="@+id/doctorNameLabel"
-        android:layout_width="250dp"
+        android:id="@+id/ptLabel"
+        android:layout_width="303dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/resultLabel"
-        android:layout_alignLeft="@+id/doctorNameLabel_title"
-        android:layout_marginLeft="205dp"
-        android:layout_marginTop="30dp"
+        android:layout_alignLeft="@+id/ptLabel_title"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="-10dp"
         android:background="@null"
-        android:fontFamily="serif"
+        android:fontFamily="sans-serif-smallcaps"
+        android:inputType="number"
         android:lineSpacingExtra="8sp"
         android:saveEnabled="false"
-        android:text="贾医生"
+        android:text="1.0"
         android:textAlignment="textStart"
         android:textColor="@color/colorAccent"
-        android:textSize="40sp" />
+        android:textSize="80sp" />
 
-    <View
-        android:id="@+id/black_line6"
-        android:layout_width="260dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/doctorNameLabel"
-        android:layout_marginLeft="260dp"
-        android:layout_marginTop="-10dp"
-        android:background="#000000"></View>
+
+
 
     <TextView
         android:id="@+id/checkDateLabel_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/doctorNameLabel"
+        android:layout_below="@+id/ptLabel"
         android:layout_marginStart="60dp"
         android:layout_marginTop="12dp"
         android:fontFamily="serif"
@@ -282,7 +234,7 @@
         android:id="@+id/checkDateLabel"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/doctorNameLabel"
+        android:layout_below="@+id/ptLabel"
         android:layout_alignLeft="@+id/checkDateLabel_title"
         android:layout_marginLeft="205dp"
         android:layout_marginTop="12dp"
@@ -297,7 +249,7 @@
         android:textSize="40sp" />
 
     <View
-        android:id="@+id/black_line7"
+        android:id="@+id/black_line6"
         android:layout_width="260dp"
         android:layout_height="2dp"
         android:layout_below="@+id/checkDateLabel"
@@ -338,7 +290,7 @@
         android:textSize="40sp" />
 
     <View
-        android:id="@+id/black_line8"
+        android:id="@+id/black_line7"
         android:layout_width="260dp"
         android:layout_height="2dp"
         android:layout_below="@+id/testTimeLabel"
@@ -379,10 +331,51 @@
         android:textSize="40sp" />
 
     <View
-        android:id="@+id/black_line9"
+        android:id="@+id/black_line8"
         android:layout_width="260dp"
         android:layout_height="2dp"
         android:layout_below="@+id/reportDateLabel"
+        android:layout_marginLeft="260dp"
+        android:layout_marginTop="-10dp"
+        android:background="#000000"></View>
+
+    <TextView
+        android:id="@+id/doctorNameLabel_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reportDateLabel"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="5dp"
+        android:fontFamily="serif"
+        android:lineSpacingExtra="8sp"
+        android:text="报告医生："
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="40sp" />
+
+    <EditText
+        android:id="@+id/doctorNameLabel"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reportDateLabel"
+        android:layout_alignLeft="@+id/doctorNameLabel_title"
+        android:layout_marginLeft="205dp"
+        android:layout_marginTop="12dp"
+        android:background="@null"
+        android:fontFamily="serif"
+        android:lineSpacingExtra="8sp"
+        android:saveEnabled="false"
+        android:text="贾医生"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="40sp" />
+
+    <View
+        android:id="@+id/black_line9"
+        android:layout_width="260dp"
+        android:layout_height="2dp"
+        android:layout_below="@+id/doctorNameLabel"
         android:layout_marginLeft="260dp"
         android:layout_marginTop="-10dp"
         android:background="#000000"></View>

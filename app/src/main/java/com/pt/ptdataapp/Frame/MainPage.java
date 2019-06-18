@@ -231,7 +231,7 @@ public class MainPage extends Fragment {
             if (pInfo != null) {
                 Log.d(TAG, pInfo.checkDate + " " + pInfo.checkResult + " " + pInfo.testID);
                 holder.titleLabel.setText(pInfo.title);
-                int inputType = (pInfo.ID.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_NUMBER;
+                int inputType = InputType.TYPE_NULL;
                 holder.IDLabel.setInputType(inputType);
                 holder.IDLabel.setText(pInfo.ID);
 
@@ -257,7 +257,7 @@ public class MainPage extends Fragment {
                 holder.doctorNameLabel.setInputType(inputType);
                 holder.doctorNameLabel.setText(pInfo.doctorName);
 
-                inputType = (pInfo.checkDate.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
+                inputType = InputType.TYPE_NULL ;
                 holder.checkDateLabel.setInputType(inputType);
                 holder.checkDateLabel.setText(pInfo.checkDate);
 

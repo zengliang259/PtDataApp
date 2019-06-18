@@ -232,15 +232,22 @@ public class StationListPage extends Fragment {
 
         @Override
         public void onBindViewHolder(StationListPage.MyAdapter.ViewHolder holder, int position) {
-            FileEntity file = mAList.get(position);
-            if (file != null)
+            FileEntity fileEntity = mAList.get(position);
+            if (fileEntity != null)
             {
-                holder.stationName.setText(file.getFileName());
+                File file = new File(fileEntity.getFilePath());
+                File[] list = file.listFiles();
+                for (File item :list)
+                {
+                    if (item.getName().equals("id.txt"))
+                    {
+                        holder.stationName.setText(fileEntity.getFileName());
+                        return;
+                    }
+                }
             }
-            else
-            {
-                holder.stationName.setText("当前无设备数据");
-            }
+
+            holder.stationName.setText("设备无法识别");
         }
 
         @Override
@@ -267,6 +274,10 @@ public class StationListPage extends Fragment {
                 stationName = itemView.findViewById(R.id.stationNameLabel);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        if (stationName.getText().equals("设备无法识别"))
+                        {
+                            return;
+                        }
                         int pos = getAdapterPosition();
                         final FileEntity entity = mAList.get(pos);
                         if (entity != null) {
