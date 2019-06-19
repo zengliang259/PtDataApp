@@ -96,15 +96,6 @@ public class TSCUtils {
         cmdStr += Indent(41, 0);
         content = printContentList.get(3);
         cmdStr += GetSingleTextCmdStr(TestIDStr, content, 1);
-
-        // pt值
-        cmdStr += UnderLine_Start1;
-        cmdStr += StringUtil.ByteToHexString((byte) 0);
-        cmdStr += UnderLine_Start2;
-        cmdStr += StringUtil.ByteToHexString((byte) 0);
-        cmdStr += Indent(41, 0);
-        content = printContentList.get(4);
-        cmdStr += GetSingleTextCmdStr(PtStr, content, 1);
         cmdStr += EnterPaperLine(1);
 
         // INR
@@ -119,6 +110,18 @@ public class TSCUtils {
         content = printContentList.get(5);
         cmdStr += GetSingleTextCmdStr(INRStr, content, 0);
         cmdStr += EnterPaperLine(1);
+        // pt值
+        cmdStr += Font_Size;
+        cmdStr += StringUtil.ByteToHexString((byte)51);
+        cmdStr += UnderLine_Start1;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += UnderLine_Start2;
+        cmdStr += StringUtil.ByteToHexString((byte) 0); // 取消下划线
+        cmdStr += Bold;
+        cmdStr += Indent(41, 0);
+        content = printContentList.get(4);
+        cmdStr += GetSingleTextCmdStr(PtStr, content, 0);
+        cmdStr += EnterPaperLine(1);
 
         cmdStr += Bold_Cancel;
         cmdStr += "1B2101"; // 字符方式，压缩ascci
@@ -130,14 +133,6 @@ public class TSCUtils {
         cmdStr += StringUtil.ByteToHexString((byte) 0);
         cmdStr += Bold_Cancel;
 
-        // 报告医生
-        cmdStr += Indent(41,0);
-        content = printContentList.get(6);
-        cmdStr += GetSingleTextCmdStr(DoctorNameStr,content,1);
-        cmdStr += UnderLine_Start1;
-        cmdStr += StringUtil.ByteToHexString((byte) 0);
-        cmdStr += UnderLine_Start2;
-        cmdStr += StringUtil.ByteToHexString((byte) 0);
 
         // 检测日期
 
@@ -163,11 +158,20 @@ public class TSCUtils {
         cmdStr += Indent(41,0);
         content = printContentList.get(9);
         cmdStr += GetSingleTextCmdStr(ReportDateStr,content,2);
+        cmdStr += UnderLine_Start1;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+        cmdStr += UnderLine_Start2;
+        cmdStr += StringUtil.ByteToHexString((byte) 0);
+
+        // 报告医生
+        cmdStr += Indent(41,0);
+        content = printContentList.get(6);
+        cmdStr += GetSingleTextCmdStr(DoctorNameStr,content,2);
         // 切纸
         cmdStr += Cut_Paper;
         cmdStr += StringUtil.ByteToHexString((byte) 2);
 
-        Log.d("Print", cmdStr);
+//        Log.d("Print", cmdStr);
 //        cmdStr = TestCmd();
         return StringUtil.hexString2Bytes(cmdStr);
     }

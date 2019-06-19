@@ -111,6 +111,7 @@ public class MainPage extends Fragment {
         if (mAdapter != null && mAdapter.mAList.size() > index)
         {
             mRecyclerView.scrollToPosition(index);
+            curSelectIndex = index;
         }
     }
 

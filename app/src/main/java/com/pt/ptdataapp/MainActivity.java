@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     List<FileEntity> sourceList = FileUtil.FindAllFile(sourcePath, true);
                     if (oldMountFileCount != sourceList.size())
                     {
+                        Log.d(TAG, "Pt设备检测到新增文件！");
                         oldMountFileCount = sourceList.size();
                         Log.d(TAG, "开始复制" + PtMountPath);
                         FileUtil.copyFolder(sourcePath, lastPtMountCopyDestFilePath, thisContext);
@@ -352,6 +353,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         List<String> printList = DataManager.getInstance().getPrintContentListCache();
         if(printList.size() > 0)
         {
+            initPrintUsb();
             if (m_printUsbDevice != null)
             {
                 if (UsbConnectionUtil.getInstance().hasPermission(m_printUsbDevice))
