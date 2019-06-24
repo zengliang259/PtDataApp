@@ -12,6 +12,7 @@
         android:id="@+id/titleLabel"
         android:layout_width="match_parent"
         android:layout_height="135dp"
+        android:layout_marginTop="35dp"
         android:fontFamily="@font/amaranth"
         android:lineSpacingExtra="8sp"
         android:text="Hemo POC\n检测报告单"
@@ -24,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="6dp"
         android:layout_below="@+id/titleLabel"
+        android:layout_marginTop="-15dp"
         android:background="#000000"></View>
 
     <TextView
@@ -32,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/black_line"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:fontFamily="serif"
         android:lineSpacingExtra="8sp"
         android:text="病人ID："
@@ -40,14 +42,14 @@
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
 
-    <EditText
+    <TextView
         android:id="@+id/IDLabel"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/black_line"
         android:layout_alignLeft="@+id/IDLabel_title"
         android:layout_marginLeft="165dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:background="@null"
         android:fontFamily="serif"
         android:inputType="number"
@@ -73,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/IDLabel"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:layout_marginEnd="5dp"
         android:fontFamily="serif"
         android:lineSpacingExtra="8sp"
@@ -89,7 +91,7 @@
         android:layout_below="@+id/IDLabel"
         android:layout_alignLeft="@+id/patientNameLabel_title"
         android:layout_marginLeft="115dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:background="@null"
         android:fontFamily="serif"
         android:lineSpacingExtra="8sp"
@@ -114,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/patientNameLabel"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:fontFamily="serif"
         android:lineSpacingExtra="8sp"
         android:text="检测序号："
@@ -122,14 +124,14 @@
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
 
-    <EditText
+    <TextView
         android:id="@+id/testIDLabel"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/patientNameLabel"
         android:layout_alignLeft="@+id/testIDLabel_title"
         android:layout_marginLeft="195dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:background="@null"
         android:fontFamily="serif"
         android:inputType="number"
@@ -155,7 +157,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/testIDLabel"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:fontFamily="sans-serif-smallcaps"
         android:lineSpacingExtra="8sp"
         android:text="INR："
@@ -163,14 +165,14 @@
         android:textColor="@color/colorAccent"
         android:textSize="80sp" />
 
-    <EditText
+    <TextView
         android:id="@+id/resultLabel"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/testIDLabel"
         android:layout_alignLeft="@+id/resultLabel_title"
         android:layout_marginLeft="200dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:background="@null"
         android:fontFamily="sans-serif-smallcaps"
         android:inputType="number"
@@ -190,12 +192,12 @@
         android:layout_marginTop="-10dp"
         android:fontFamily="sans-serif-smallcaps"
         android:lineSpacingExtra="8sp"
-        android:text="Pt："
+        android:text="PT："
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="80sp" />
 
-    <EditText
+    <TextView
         android:id="@+id/ptLabel"
         android:layout_width="303dp"
         android:layout_height="wrap_content"
@@ -222,7 +224,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ptLabel"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:fontFamily="serif"
         android:lineSpacingExtra="8sp"
         android:text="检测日期："
@@ -230,14 +232,14 @@
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
 
-    <EditText
+    <TextView
         android:id="@+id/checkDateLabel"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ptLabel"
         android:layout_alignLeft="@+id/checkDateLabel_title"
         android:layout_marginLeft="205dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:background="@null"
         android:fontFamily="serif"
         android:inputType="date"
@@ -263,7 +265,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/checkDateLabel"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:fontFamily="serif"
         android:lineSpacingExtra="8sp"
         android:text="检测时间："
@@ -271,14 +273,14 @@
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
 
-    <EditText
+    <TextView
         android:id="@+id/testTimeLabel"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/checkDateLabel"
         android:layout_alignLeft="@+id/checkDateLabel_title"
         android:layout_marginLeft="205dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:background="@null"
         android:fontFamily="serif"
         android:inputType="date"
@@ -304,7 +306,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/testTimeLabel"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:fontFamily="serif"
         android:lineSpacingExtra="8sp"
         android:text="报告日期："
@@ -312,14 +314,14 @@
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
 
-    <EditText
+    <TextView
         android:id="@+id/reportDateLabel"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/testTimeLabel"
         android:layout_alignLeft="@+id/reportDateLabel_title"
         android:layout_marginLeft="205dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:background="@null"
         android:fontFamily="serif"
         android:inputType="datetime"
@@ -345,7 +347,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/reportDateLabel"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:layout_marginEnd="5dp"
         android:fontFamily="serif"
         android:lineSpacingExtra="8sp"
@@ -361,7 +363,7 @@
         android:layout_below="@+id/reportDateLabel"
         android:layout_alignLeft="@+id/doctorNameLabel_title"
         android:layout_marginLeft="205dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:background="@null"
         android:fontFamily="serif"
         android:lineSpacingExtra="8sp"

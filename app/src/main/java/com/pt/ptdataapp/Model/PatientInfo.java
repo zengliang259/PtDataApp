@@ -1,7 +1,7 @@
 package com.pt.ptdataapp.Model;
 
 public class PatientInfo {
-    public String title = "岭南医院\nINR检测报告单";
+    public String title = "Hemo POC\n检测报告单";
     public String ID = "";
     public String checkResult = "";
     public String patientName = "";

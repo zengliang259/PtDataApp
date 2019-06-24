@@ -94,7 +94,7 @@ public class UsbConnectionUtil {
                 return device;
             }
         }
-        Toast.makeText(Utils.getContext(), "没有发现对应的USB打印设备", Toast.LENGTH_SHORT).show();
+        Log.d( "USBUtil","没有发现对应的USB打印设备");
         return null;
     }
 
@@ -115,7 +115,7 @@ public class UsbConnectionUtil {
                     usbManager.requestPermission(device, mPermissionIntent);
 //                    Toast.makeText(Utils.getContext(), "请求USB权限", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(Utils.getContext(), "请注册USB广播", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(Utils.getContext(), "请注册USB广播", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -137,14 +137,14 @@ public class UsbConnectionUtil {
                 return false;
             }
             if (usbConnection.claimInterface(usbInterface, true)) {
-                Toast.makeText(Utils.getContext(), "找到 USB 设备接口", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Utils.getContext(), "找到 USB 设备接口", Toast.LENGTH_SHORT).show();
             } else {
                 usbConnection.close();
-                Toast.makeText(Utils.getContext(), "没有找到 USB 设备接口", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Utils.getContext(), "没有找到 USB 设备接口", Toast.LENGTH_SHORT).show();
                 return false;
             }
         } else {
-            Toast.makeText(Utils.getContext(), "没有 USB 权限", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(Utils.getContext(), "没有 USB 权限", Toast.LENGTH_SHORT).show();
             return false;
         }
 

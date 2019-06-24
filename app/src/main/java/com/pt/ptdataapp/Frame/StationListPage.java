@@ -1,7 +1,10 @@
 package com.pt.ptdataapp.Frame;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -10,16 +13,25 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.pt.ptdataapp.MainActivity;
+import com.pt.ptdataapp.Model.DataManager;
 import com.pt.ptdataapp.Model.FileEntity;
 import com.pt.ptdataapp.Model.LocalFileModel;
 import com.pt.ptdataapp.R;
 import com.pt.ptdataapp.fileUtil.FileUtil;
 import com.pt.ptdataapp.uiUtils.OnViewPagerListener;
+import com.pt.ptdataapp.uiUtils.RecyclerViewWithContextMenu;
 import com.pt.ptdataapp.uiUtils.ViewPagerLayoutManager;
+import com.pt.ptdataapp.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,14 +41,15 @@ public class StationListPage extends Fragment {
 
     private View rootView;
     private static final String TAG = "StationListPage";
-    private RecyclerView mRecyclerView;
+    private RecyclerViewWithContextMenu mRecyclerView;
     private StationListPage.MyAdapter mAdapter;
     private ViewPagerLayoutManager mLayoutManager;
     private int curSelectIndex = 0;
-    private Context activityContext;
+    private MainActivity activityContext;
     private Handler mHandler;
     private ArrayList<FileEntity> mList;
     private String rootFilePath;
+    private int menuSelectPosition = -1;
 
     public StationListPage()
     {
@@ -72,10 +85,73 @@ public class StationListPage extends Fragment {
         return rootView;
     }
 
-    public void SetContext(Context context)
+    public void SetContext(MainActivity context)
     {
         activityContext = context;
 
+    }
+
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu,v,menuInfo);
+        //设置Menu显示内容
+        menu.setHeaderTitle("文件操作");
+        menu.add(1,1,1,"删除");
+        File curCopyTargetUsbFile = DataManager.getInstance().GetCopyUsbPath();
+        if (curCopyTargetUsbFile != null)
+        {
+            menu.add(1,2,1,"复制至" + curCopyTargetUsbFile.getName());
+        }
+    }
+
+    public boolean onContextItemSelected(MenuItem item){
+//        RecyclerViewWithContextMenu.RecyclerViewContextInfo info = (RecyclerViewWithContextMenu.RecyclerViewContextInfo) item.getMenuInfo();
+//        if (info != null && info.getPosition() != -1 ) {
+            menuSelectPosition = curSelectIndex;
+            switch (item.getItemId()) {
+                case 1:
+                    if (menuSelectPosition >= 0) {
+                        final FileEntity entity = mList.get(menuSelectPosition);
+                        if (entity != null) {
+                            if (entity.getFileType() == FileEntity.Type.FILE) {
+                                FileUtil.deletefile(entity.getFilePath());
+                            } else {
+                                FileUtil.deleteDirectory(entity.getFilePath());
+                            }
+
+                            mList.remove(menuSelectPosition);
+                            menuSelectPosition = -1;
+                            mHandler.sendEmptyMessage(1);
+                        }
+                    }
+
+                    break;
+                case 2:
+                    if (menuSelectPosition >= 0) {
+                        File curCopyTargetUsbFile = DataManager.getInstance().GetCopyUsbPath();
+                        if (curCopyTargetUsbFile == null || !curCopyTargetUsbFile.exists()) {
+                            Toast.makeText(Utils.getContext(), "复制目标目录不存在", Toast.LENGTH_SHORT).show();
+                            return super.onContextItemSelected(item);
+                        }
+
+                        final FileEntity entity = mList.get(menuSelectPosition);
+                        if (entity != null) {
+                            String sourcePath = entity.getFilePath();
+                            String targetPath = curCopyTargetUsbFile.getAbsolutePath() + File.separator + entity.getFileName();
+                            activityContext.ShowDialog("正在复制文件,请勿拔出USB设备");
+                            if (entity.getFileType() == FileEntity.Type.FLODER) {
+
+                                FileUtil.copyFolder(sourcePath, targetPath, null);
+                            } else {
+                                FileUtil.copyFile(sourcePath, targetPath);
+                            }
+                            activityContext.HideDialog();
+                            menuSelectPosition = -1;
+                        }
+                    }
+                    break;
+            }
+//        }
+        return super.onContextItemSelected(item);
     }
 
     public void NotifyListDataRefresh()
@@ -158,6 +234,7 @@ public class StationListPage extends Fragment {
                 }
             }
         };
+        registerForContextMenu(mRecyclerView);
 
         if (cacheScrollToIndex >= 0)
         {
@@ -235,16 +312,8 @@ public class StationListPage extends Fragment {
             FileEntity fileEntity = mAList.get(position);
             if (fileEntity != null)
             {
-                File file = new File(fileEntity.getFilePath());
-                File[] list = file.listFiles();
-                for (File item :list)
-                {
-                    if (item.getName().equals("id.txt"))
-                    {
-                        holder.stationName.setText(fileEntity.getFileName());
-                        return;
-                    }
-                }
+                holder.stationName.setText(fileEntity.getFileName());
+                return;
             }
 
             holder.stationName.setText("设备无法识别");
@@ -274,20 +343,15 @@ public class StationListPage extends Fragment {
                 stationName = itemView.findViewById(R.id.stationNameLabel);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        if (stationName.getText().equals("设备无法识别"))
-                        {
-                            return;
-                        }
                         int pos = getAdapterPosition();
                         final FileEntity entity = mAList.get(pos);
                         if (entity != null) {
-                            Message msg = new Message();
-                            msg.what = 2;
-                            msg.obj = entity.getFilePath();
-                            msg.arg1 = pos;
-                            mHandler.sendMessage(msg);
+                                Message msg = new Message();
+                                msg.what = 2;
+                                msg.obj = entity.getFilePath();
+                                msg.arg1 = pos;
+                                mHandler.sendMessage(msg);
                         }
-
                     }
                 });
             }

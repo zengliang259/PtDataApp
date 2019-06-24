@@ -84,7 +84,7 @@ public class FileDataReader
             {
                 curMatchCode = curMatchCode | 1 << 1;
 
-                info.checkResult = splitStr[1];
+                info.checkResult = String.format("%.1f",Double.parseDouble(splitStr[1]));
 
             }
             else if ((curMatchCode >> 2 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.TestDate.toString()) >= 0))
@@ -95,7 +95,7 @@ public class FileDataReader
             else if ((curMatchCode >> 3 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.Pt.toString()) >= 0))
             {
                 curMatchCode = curMatchCode | 1 << 3;
-                info.Pt = splitStr[1];
+                info.Pt =  String.format("%.1f",Double.parseDouble(splitStr[1]));
             }
             else if ((curMatchCode >> 4 & 0x01) <= 0 && (splitStr[0].indexOf(DataNameEnum.ErrorCode.toString()) >= 0))
             {
@@ -111,6 +111,11 @@ public class FileDataReader
             {
                 curMatchCode = curMatchCode | 1 << 6;
                 info.testTime = splitStr[1];
+                int lastIndex =  info.testTime.lastIndexOf(':');
+                if (lastIndex >= 0)
+                {
+                    info.testTime = info.testTime.substring(0,lastIndex);
+                }
             }
         }
 

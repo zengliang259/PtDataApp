@@ -233,7 +233,6 @@ public class MainPage extends Fragment {
                 Log.d(TAG, pInfo.checkDate + " " + pInfo.checkResult + " " + pInfo.testID);
                 holder.titleLabel.setText(pInfo.title);
                 int inputType = InputType.TYPE_NULL;
-                holder.IDLabel.setInputType(inputType);
                 holder.IDLabel.setText(pInfo.ID);
 
                 inputType = (pInfo.patientName.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
@@ -251,24 +250,17 @@ public class MainPage extends Fragment {
                     holder.resultLabel.setText(pInfo.checkResult);
                     holder.ptLabel.setText(pInfo.Pt);
                 }
-                holder.resultLabel.setInputType(InputType.TYPE_NULL);
-                holder.ptLabel.setInputType(InputType.TYPE_NULL);
 
                 inputType = (pInfo.doctorName.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
                 holder.doctorNameLabel.setInputType(inputType);
                 holder.doctorNameLabel.setText(pInfo.doctorName);
 
-                inputType = InputType.TYPE_NULL ;
-                holder.checkDateLabel.setInputType(inputType);
                 holder.checkDateLabel.setText(pInfo.checkDate);
 
-                holder.reportDateLabel.setInputType(InputType.TYPE_NULL);
                 holder.reportDateLabel.setText(pInfo.reportDate);
 
-                holder.testIDLabel.setInputType(InputType.TYPE_NULL);
                 holder.testIDLabel.setText(pInfo.testID);
 
-                holder.testTimeLabel.setInputType(InputType.TYPE_NULL);
                 holder.testTimeLabel.setText(pInfo.testTime);
             }
         }
@@ -291,12 +283,12 @@ public class MainPage extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             RelativeLayout rootView;
-            EditText IDLabel;
+            TextView IDLabel;
             TextView titleLabel;
             EditText patientNameLabel;
-            EditText resultLabel;
+            TextView resultLabel;
             EditText doctorNameLabel;
-            EditText checkDateLabel;
+            TextView checkDateLabel;
             TextView reportDateLabel;
             TextView testIDLabel;
             TextView testTimeLabel;

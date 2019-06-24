@@ -12,6 +12,7 @@
         android:id="@+id/file_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="130dp"
         android:visibility="invisible" />
 
 </RelativeLayout>

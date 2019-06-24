@@ -35,7 +35,7 @@ public class TSCUtils {
     public static String IDStr = "病人ID:";
     public static String NameStr = "姓名:";
     public static String TestIDStr = "检测序号:";
-    public static String PtStr = "Pt:";
+    public static String PtStr = "PT:";
     public static String INRStr = "INR:";
     public static String DoctorNameStr = "报告医生:";
     public static String CheckDateStr = "检测日期:";

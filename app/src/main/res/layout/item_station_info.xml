@@ -4,18 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/home_bg">
+    android:background="@drawable/home_bg"
+    android:longClickable="true">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="597dp"
         android:layout_height="718dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="100dp"
         app:srcCompat="@drawable/pt_station" />
 
     <TextView
         android:id="@+id/stationNameLabel"
-        android:layout_width="577dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageView"
         android:layout_marginBottom="97dp"

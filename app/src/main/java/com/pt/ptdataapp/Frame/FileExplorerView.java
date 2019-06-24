@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -42,6 +43,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class FileExplorerView extends Fragment {
+    public static String TAG = "FileExplorerView";
     private View rootView;
     private ListView mListView;
 
@@ -290,7 +292,7 @@ public class FileExplorerView extends Fragment {
 
     public void onBackPressed() {
         if(rootFilePath.equals(currentFile.getAbsolutePath())){
-            System.out.println("已经到了根目录...");
+            Log.d(TAG,"已经到了根目录...");
             if (mContext != null)
             {
                 mContext.OnShowStationListPage(parentPosition);

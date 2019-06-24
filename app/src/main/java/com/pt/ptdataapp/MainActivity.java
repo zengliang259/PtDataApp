@@ -1,7 +1,9 @@
 package com.pt.ptdataapp;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
@@ -359,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 if (UsbConnectionUtil.getInstance().hasPermission(m_printUsbDevice))
                 {
                     if (UsbConnectionUtil.getInstance().openPort(m_printUsbDevice)) {
-                        Toast.makeText(Utils.getContext(), "开始打印...", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"开始打印...");
                         byte[] bytes = TSCUtils.StartPrint(printList);
                         UsbConnectionUtil.getInstance().sendMessage(bytes);
                     }
@@ -372,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
             }
             else
             {
-                Toast.makeText(Utils.getContext(), "未找到USB打印设备 ", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"未找到USB打印设备 ");
             }
         }
     }
@@ -633,6 +635,11 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     break;
                 }
             }
+            if (IDStr == null || IDStr.length() <= 0)
+            {
+                return;
+            }
+
             String destFilePath = LocalFileModel.getInstance().idFileMap.get(IDStr);
             if (destFilePath == null) // 不存在则新建，存在则直接覆盖
             {
@@ -694,6 +701,40 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         if (SDCardUtil.GetAvailablePercent() < 0.1)
         {
             Toast.makeText(Utils.getContext(), "内存空间不够，无法复制USB设备数据... ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        File originalFile = rootMountFileList.get(0);
+        ArrayList<File> files = new ArrayList<>();
+        File[] usbFiles = originalFile.listFiles();
+        if (usbFiles == null)
+        {
+            Log.e(TAG, originalFile.getAbsolutePath() + " is not exist when copy usb mount file path");
+            return;
+        }
+        Collections.addAll(files, usbFiles);
+        String IDStr = "";
+        for (File childFile : files)
+        {
+            if (childFile.getName().equals("id.txt"))
+            {
+                IDStr = FileUtil.getFile(childFile.getAbsolutePath());
+                break;
+            }
+        }
+        if (IDStr == null || IDStr.length() <= 0)
+        {
+            new AlertDialog.Builder(this)
+                    .setTitle("提示")
+                    .setMessage("设备无法识别")
+                    .setPositiveButton("确定"
+                            , new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                    .create()
+                    .show();
             return;
         }
 //        Toast.makeText(Utils.getContext(), "已开始为您同步USB数据，请勿拔出USB设备... ", Toast.LENGTH_SHORT).show();
