@@ -142,6 +142,8 @@ public class MainPage extends Fragment {
                             mAdapter = new MainPage.MyAdapter(DataManager.getInstance().GetPatientList());
                             mRecyclerView.setAdapter(mAdapter);
                         }else{
+//                            mAdapter.mAList = DataManager.getInstance().GetPatientList();
+                            Log.d(TAG, "mAapter item count =" + mAdapter.getItemCount());
                             mAdapter.notifyDataSetChanged();
                         }
                         break;

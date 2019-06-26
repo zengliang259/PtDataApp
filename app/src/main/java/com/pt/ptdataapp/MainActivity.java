@@ -116,6 +116,13 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     case 1:
                         OnShowMainPage(0);
                         break;
+                    case 2:
+                        mainPageFragment.NotifyListDataRefresh();
+                        mainPageFragment.SafeScrollToIndex(0);
+                        break;
+                    case 3:
+                        HideDialog();
+                        break;
                     default:
                         break;
                 }
@@ -161,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 timerHandler.postDelayed(this, 3000);
             }
         };
-        mHandler.postDelayed(r, 3000);
+        timerHandler.postDelayed(r, 3000);
     }
 
     @Override
@@ -678,8 +685,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                         DataManager.getInstance().CurReadChildPathBeforeMainPage = null;
                     }
                     if (temp_position_index == VIEW_MAIN_PAGE_INDEX) {
-                        mainPageFragment.NotifyListDataRefresh();
-                        mainPageFragment.SafeScrollToIndex(0);
+                        mHandler.sendEmptyMessage(2);
                     } else {
                         mHandler.sendEmptyMessage(1);
                     }
@@ -687,6 +693,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 catch (Exception e)
                 {
                     Log.e(TAG, "OpenMountFile CopyUsbDir error");
+                    Log.e(TAG, e.toString());
                 }
             }
         }
@@ -746,7 +753,7 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                 {
                     OpenMountFile();
                 }
-                HideDialog();
+                mHandler.sendEmptyMessage(3);
             }
         }.start();
     }

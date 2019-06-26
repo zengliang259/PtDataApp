@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -312,11 +313,14 @@ public class StationListPage extends Fragment {
             FileEntity fileEntity = mAList.get(position);
             if (fileEntity != null)
             {
+                holder.stationImg.setVisibility(View.VISIBLE);
+                holder.stationName.setVisibility(View.VISIBLE);
                 holder.stationName.setText(fileEntity.getFileName());
                 return;
             }
 
-            holder.stationName.setText("设备无法识别");
+            holder.stationImg.setVisibility(View.INVISIBLE);
+            holder.stationName.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -337,13 +341,18 @@ public class StationListPage extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             TextView stationName;
-
+            ImageView stationImg;
             public ViewHolder(View itemView) {
                 super(itemView);
                 stationName = itemView.findViewById(R.id.stationNameLabel);
+                stationImg = itemView.findViewById(R.id.stationImg);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         int pos = getAdapterPosition();
+                        if (pos < 0)
+                        {
+                            pos = 0;
+                        }
                         final FileEntity entity = mAList.get(pos);
                         if (entity != null) {
                                 Message msg = new Message();

@@ -8,7 +8,7 @@
     android:longClickable="true">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/stationImg"
         android:layout_width="597dp"
         android:layout_height="718dp"
         android:layout_marginLeft="10dp"
@@ -19,7 +19,7 @@
         android:id="@+id/stationNameLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignBottom="@+id/stationImg"
         android:layout_marginBottom="97dp"
         android:fontFamily="sans-serif-smallcaps"
         android:text="1234571"
