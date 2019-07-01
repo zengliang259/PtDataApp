@@ -357,33 +357,34 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
         if (temp_position_index == VIEW_MAIN_PAGE_INDEX)
         {
             mainPageFragment.SaveEditData();
-        }
-
-        List<String> printList = DataManager.getInstance().getPrintContentListCache();
-        if(printList.size() > 0)
-        {
-            initPrintUsb();
-            if (m_printUsbDevice != null)
+            List<String> printList = DataManager.getInstance().getPrintContentListCache();
+            if(printList.size() > 0)
             {
-                if (UsbConnectionUtil.getInstance().hasPermission(m_printUsbDevice))
+                initPrintUsb();
+                if (m_printUsbDevice != null)
                 {
-                    if (UsbConnectionUtil.getInstance().openPort(m_printUsbDevice)) {
-                        Log.d(TAG,"开始打印...");
-                        byte[] bytes = TSCUtils.StartPrint(printList);
-                        UsbConnectionUtil.getInstance().sendMessage(bytes);
+                    if (UsbConnectionUtil.getInstance().hasPermission(m_printUsbDevice))
+                    {
+                        if (UsbConnectionUtil.getInstance().openPort(m_printUsbDevice)) {
+                            Log.d(TAG,"开始打印...");
+                            byte[] bytes = TSCUtils.StartPrint(printList);
+                            UsbConnectionUtil.getInstance().sendMessage(bytes);
+                        }
+                    }
+                    else
+                    {
+//                    Toast.makeText(Utils.getContext(), "正在获取Usb设备 " + m_printUsbDevice.getDeviceName() + " 权限中，请稍候再试...", Toast.LENGTH_SHORT).show();
+                        UsbConnectionUtil.getInstance().requestPermission(m_printUsbDevice);
                     }
                 }
                 else
                 {
-//                    Toast.makeText(Utils.getContext(), "正在获取Usb设备 " + m_printUsbDevice.getDeviceName() + " 权限中，请稍候再试...", Toast.LENGTH_SHORT).show();
-                    UsbConnectionUtil.getInstance().requestPermission(m_printUsbDevice);
+                    Log.d(TAG,"未找到USB打印设备 ");
                 }
             }
-            else
-            {
-                Log.d(TAG,"未找到USB打印设备 ");
-            }
         }
+
+
     }
 
     private void setButton(View v) {
