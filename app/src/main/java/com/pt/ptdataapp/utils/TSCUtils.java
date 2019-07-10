@@ -120,7 +120,7 @@ public class TSCUtils {
         cmdStr += Bold;
         cmdStr += Indent(41, 0);
         content = printContentList.get(4);
-        cmdStr += GetSingleTextCmdStr(PtStr, content, 0);
+        cmdStr += GetSingleTextCmdStr(" " + PtStr, content, 0);
         cmdStr += EnterPaperLine(1);
 
         cmdStr += Bold_Cancel;

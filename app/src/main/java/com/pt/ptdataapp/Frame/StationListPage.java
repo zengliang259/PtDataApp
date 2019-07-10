@@ -121,6 +121,10 @@ public class StationListPage extends Fragment {
 
                             mList.remove(menuSelectPosition);
                             menuSelectPosition = -1;
+                            if (mList.size() == 0)
+                            {
+                                mList.add(null);
+                            }
                             mHandler.sendEmptyMessage(1);
                         }
                     }
@@ -159,7 +163,7 @@ public class StationListPage extends Fragment {
     {
         if (rootView != null)
         {
-            mHandler.sendEmptyMessage(1);
+            getData(rootFilePath);
         }
 
     }

@@ -123,6 +123,16 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                     case 3:
                         HideDialog();
                         break;
+                    case 4:
+                        if (temp_position_index == VIEW_STATION_LIST_INDEX)
+                        {
+                            stationListPage.NotifyListDataRefresh();
+                        }
+                        else
+                        {
+                            OnShowStationListPage(0);
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -680,16 +690,18 @@ public class MainActivity extends AppCompatActivity implements USBBroadCastRecei
                         String dataFilePath = fileList.get(0).getKey();
                         File dataFile = new File(dataFilePath);
                         DataManager.getInstance().CurReadChildPathBeforeMainPage = dataFile.getParent();
+                        if (temp_position_index == VIEW_MAIN_PAGE_INDEX) {
+                            mHandler.sendEmptyMessage(2);
+                        } else {
+                            mHandler.sendEmptyMessage(1);
+                        }
                     }
                     else
                     {
                         DataManager.getInstance().CurReadChildPathBeforeMainPage = null;
+                        mHandler.sendEmptyMessage(4);
                     }
-                    if (temp_position_index == VIEW_MAIN_PAGE_INDEX) {
-                        mHandler.sendEmptyMessage(2);
-                    } else {
-                        mHandler.sendEmptyMessage(1);
-                    }
+
                 }
                 catch (Exception e)
                 {
