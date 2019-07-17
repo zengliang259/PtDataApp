@@ -24,6 +24,7 @@ import com.pt.ptdataapp.Model.PatientInfo;
 import com.pt.ptdataapp.R;
 import com.pt.ptdataapp.uiUtils.OnViewPagerListener;
 import com.pt.ptdataapp.uiUtils.ViewPagerLayoutManager;
+import com.pt.ptdataapp.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -234,8 +235,10 @@ public class MainPage extends Fragment {
             if (pInfo != null) {
                 Log.d(TAG, pInfo.checkDate + " " + pInfo.checkResult + " " + pInfo.testID);
                 holder.titleLabel.setText(pInfo.title);
-                int inputType = InputType.TYPE_NULL;
+
+                int inputType = InputType.TYPE_CLASS_TEXT;
                 holder.IDLabel.setText(pInfo.ID);
+                holder.IDLabel.setInputType(inputType);
 
                 inputType = (pInfo.patientName.length() > 0) ? InputType.TYPE_NULL : InputType.TYPE_CLASS_TEXT;
                 holder.patientNameLabel.setInputType(inputType);
@@ -309,6 +312,9 @@ public class MainPage extends Fragment {
                 testTimeLabel = itemView.findViewById(R.id.testTimeLabel);
                 ptLabel = itemView.findViewById(R.id.ptLabel);
                 testIDLabel = itemView.findViewById(R.id.testIDLabel);
+
+                Typeface typeface = Typeface.createFromAsset(Utils.getContext().getAssets(), "font/arcena.ttf");
+                titleLabel.setTypeface(typeface);
             }
         }
     }
