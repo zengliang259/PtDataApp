@@ -15,7 +15,7 @@
         android:layout_marginTop="35dp"
         android:fontFamily="sans-serif"
         android:lineSpacingExtra="8sp"
-        android:text="Hemo POC\n检测报告单"
+        android:text="HemoPOC\n检测报告单"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
@@ -60,15 +60,6 @@
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
 
-    <View
-        android:id="@+id/black_line2"
-        android:layout_width="295dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/IDLabel"
-        android:layout_marginLeft="220dp"
-        android:layout_marginTop="-10dp"
-        android:background="#000000"></View>
-
     <TextView
         android:id="@+id/patientNameLabel_title"
         android:layout_width="wrap_content"
@@ -79,7 +70,7 @@
         android:layout_marginEnd="5dp"
         android:fontFamily="serif"
         android:lineSpacingExtra="8sp"
-        android:text="姓名："
+        android:text="姓    名："
         android:textAlignment="viewStart"
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
@@ -90,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/IDLabel"
         android:layout_alignLeft="@+id/patientNameLabel_title"
-        android:layout_marginLeft="115dp"
+        android:layout_marginLeft="158dp"
         android:layout_marginTop="18dp"
         android:background="@null"
         android:fontFamily="serif"
@@ -100,15 +91,6 @@
         android:textAlignment="viewStart"
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
-
-    <View
-        android:id="@+id/black_line3"
-        android:layout_width="345dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/patientNameLabel"
-        android:layout_marginLeft="170dp"
-        android:layout_marginTop="-10dp"
-        android:background="#000000"></View>
 
     <TextView
         android:id="@+id/testIDLabel_title"
@@ -142,15 +124,6 @@
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
 
-    <View
-        android:id="@+id/black_line4"
-        android:layout_width="265dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/testIDLabel"
-        android:layout_marginLeft="248dp"
-        android:layout_marginTop="-10dp"
-        android:background="#000000"></View>
-
     <TextView
         android:id="@+id/resultLabel_title"
         android:layout_width="wrap_content"
@@ -160,14 +133,14 @@
         android:layout_marginTop="18dp"
         android:fontFamily="sans-serif-smallcaps"
         android:lineSpacingExtra="8sp"
-        android:text="INR："
+        android:text="INR"
         android:textAlignment="textStart"
         android:textColor="@color/colorAccent"
         android:textSize="80sp" />
 
     <TextView
         android:id="@+id/resultLabel"
-        android:layout_width="300dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/testIDLabel"
         android:layout_alignLeft="@+id/resultLabel_title"
@@ -178,8 +151,8 @@
         android:inputType="number"
         android:lineSpacingExtra="8sp"
         android:saveEnabled="false"
-        android:text="1.0"
-        android:textAlignment="textStart"
+        android:text="8.0"
+        android:textAlignment="textEnd"
         android:textColor="@color/colorAccent"
         android:textSize="80sp" />
 
@@ -188,30 +161,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/resultLabel"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="-10dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="-15dp"
         android:fontFamily="sans-serif-smallcaps"
         android:lineSpacingExtra="8sp"
-        android:text="PT："
+        android:text="PT"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="80sp" />
 
     <TextView
         android:id="@+id/ptLabel"
-        android:layout_width="303dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/resultLabel"
         android:layout_alignLeft="@+id/ptLabel_title"
-        android:layout_marginLeft="168dp"
+        android:layout_marginLeft="200dp"
         android:layout_marginTop="-10dp"
         android:background="@null"
         android:fontFamily="sans-serif-smallcaps"
         android:inputType="number"
         android:lineSpacingExtra="8sp"
         android:saveEnabled="false"
-        android:text="1.0"
-        android:textAlignment="textStart"
+        android:text="8.0"
+        android:textAlignment="textEnd"
         android:textColor="@color/colorAccent"
         android:textSize="80sp" />
 
@@ -250,15 +223,6 @@
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
 
-    <View
-        android:id="@+id/black_line6"
-        android:layout_width="260dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/checkDateLabel"
-        android:layout_marginLeft="260dp"
-        android:layout_marginTop="-10dp"
-        android:background="#000000"></View>
-
     <TextView
         android:id="@+id/testTimeLabel_title"
         android:layout_width="wrap_content"
@@ -290,15 +254,6 @@
         android:textAlignment="textStart"
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
-
-    <View
-        android:id="@+id/black_line7"
-        android:layout_width="260dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/testTimeLabel"
-        android:layout_marginLeft="260dp"
-        android:layout_marginTop="-10dp"
-        android:background="#000000"></View>
 
     <TextView
         android:id="@+id/reportDateLabel_title"
@@ -332,15 +287,6 @@
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
 
-    <View
-        android:id="@+id/black_line8"
-        android:layout_width="260dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/reportDateLabel"
-        android:layout_marginLeft="260dp"
-        android:layout_marginTop="-10dp"
-        android:background="#000000"></View>
-
     <TextView
         android:id="@+id/doctorNameLabel_title"
         android:layout_width="wrap_content"
@@ -372,14 +318,5 @@
         android:textAlignment="textStart"
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
-
-    <View
-        android:id="@+id/black_line9"
-        android:layout_width="260dp"
-        android:layout_height="2dp"
-        android:layout_below="@+id/doctorNameLabel"
-        android:layout_marginLeft="260dp"
-        android:layout_marginTop="-10dp"
-        android:background="#000000"></View>
 
 </RelativeLayout>
